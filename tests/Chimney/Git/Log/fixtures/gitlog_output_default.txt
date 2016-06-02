@@ -1,0 +1,279 @@
+commit ba8829e4fc08a467fdfd02c059762993889bb725
+Merge: 343b670 ecaaf3f
+Author: Torben Brodt <tb@plista.com>
+Date:   Wed Apr 27 17:05:10 2016 +0200
+
+    Merge branch 'jse/update_recommender_version' into 'next'
+
+    update recommender version
+
+
+
+    See merge request !113
+
+commit ecaaf3fca4070affdeabd89d7d4ffe21b0061d50
+Author: jse <jse@plista.com>
+Date:   Wed Apr 27 17:02:12 2016 +0200
+
+    update recommender version
+
+commit 343b670b8159f8c14c7397366387dc4fb2ddf20f
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Wed Apr 27 15:06:48 2016 +0200
+
+      - Removing plista-dataeng/algorithm (8.0.10)
+      - Installing plista-dataeng/algorithm (8.0.11)
+
+commit 3399af9f93ba898c42007db9f2c3c474b6f14e16
+Author: Tobias Heintz <thz@plista.com>
+Date:   Wed Apr 27 14:18:06 2016 +0200
+
+    * added php5 and php5-curl as debian dependencies
+
+commit 3858a246ba4f29934ecea6a5889429a511fa1478
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Wed Apr 27 11:22:36 2016 +0200
+
+    plista-plugin (3.11.1)
+
+commit f92045f8bb9603577618bd5bf75544461d5365b0
+Merge: c03e31f 5dfe72c
+Author: Torben Brodt <tb@plista.com>
+Date:   Wed Apr 27 11:01:35 2016 +0200
+
+    Merge branch 'ap/DEVDP-5200/fix_early_cookies_sent' into 'next'
+
+    FIX: [DEVDP-5200] The newly introduced retargeting cookie was sent after sending content to user.
+
+
+
+    See merge request !112
+
+commit 5dfe72c0656742ab0ccce35220b16f43f03e2d43
+Author: Alexander Palamarchuk <ap@plista.com>
+Date:   Wed Apr 27 10:57:13 2016 +0200
+
+    FIX: [DEVDP-5200] The newly introduced retargeting cookie was sent after sending content to user.
+
+commit c03e31f6e717a1d02f10813d82fb312a9f346f70
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Wed Apr 27 09:51:28 2016 +0200
+
+    plista-plugin (3.11.0)
+
+commit d9a03ce6a3fdaeceeca47551c482705a162481a5
+Merge: 9bc9eaa 30da862
+Author: Torben Brodt <tb@plista.com>
+Date:   Wed Apr 27 09:43:47 2016 +0200
+
+    Merge branch 'ap/DEVDP-5200/retargeting_with_cookies' into 'next'
+
+    Retargeting cookies
+
+     * NEW: Targeting vectors will be removed if the event code is >= 21 (before it happened only when the event code = 0).
+     * REF: ConversionActivityController now operates with PluginLib\Refactoring\VectorsHandler and PluginLib\Refactoring\VectorsHandler
+     * NEW: ConversionActivityController now operates also with retargeting cookies. DEVDP-5200
+     * FIX: Retargeting campaign was added to vectors history without checking the event code = 11.
+     * Updating plista-dataeng/plugin-lib (2.3.1 => 2.3.3).
+
+    See merge request !111
+
+commit 9bc9eaa594ad71ad61906a8829de74af7e43d86b
+Merge: bf60a2c 3c5a20a
+Author: Alexander Palamarchuk <ap@plista.com>
+Date:   Tue Apr 26 19:49:27 2016 +0200
+
+    Merge branch 'vl/DEVDP-5207/vast-xml-export' into 'next'
+
+    DEVDP-5207: if itemid is specified, the vast xml output gets handled by vastad class
+
+    * introduced itemid
+    * if itemid present, the vast xml output is handled by VastAd
+    * this merge request depends on another merge request in widget package https://gitlab.plista.com/dataeng/plista-widget/merge_reques
+
+    See merge request !110
+
+commit 30da862b877d4baf86a25cb6ed457a20032ccd9f
+Author: Alexander Palamarchuk <ap@plista.com>
+Date:   Mon Apr 25 15:40:52 2016 +0200
+
+     * REF: moving the process of handling retargeting vectors to a special Plugin\Pets\RetargetingHandler.
+     * NEW: Targeting vectors will be removed if the event code is >= 21 (before it happened only when the event code = 0).
+     * REF: ConversionActivityController now operates with PluginLib\Refactoring\VectorsHandler and PluginLib\Refactoring\VectorsHandler
+     * NEW: ConversionActivityController now operates also with retargeting cookies. DEVDP-5200
+     * FIX: Retargeting campaign was added to vectors history without checking the event code = 11.
+     * Updating plista-dataeng/plugin-lib (2.3.1 => 2.3.3).
+
+commit 3c5a20a825eb2b669e0b1df7b4d21ba661f052db
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Tue Apr 26 19:30:54 2016 +0200
+
+    DEVDP-5207 fix PluginVastVideoControllerTest
+
+commit 97422f014e5e2efbcf39b535f6ccd138335fdf41
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Tue Apr 26 19:25:08 2016 +0200
+
+    DEVDP-5207 composer update only widget and tracking
+
+commit b97895f1902ab7e6c91291232f46004ee06c0c08
+Merge: fe385b2 046a822
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Tue Apr 26 17:55:12 2016 +0200
+
+    Merge remote-tracking branch 'origin/vl/DEVDP-5207/vast-xml-export' into vl/DEVDP-5207/vast-xml-export
+
+commit fe385b2fc8e07721439abda059c1bfbd02c5f8b1
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Tue Apr 26 17:54:05 2016 +0200
+
+    composer update
+
+commit bf60a2c5264bd1367edb85ffc61f50737cdc1b72
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Tue Apr 26 17:41:29 2016 +0200
+
+    DEVDP-5139 update jsv test file
+
+commit 046a8229257c9277458f8acc233b70e808a586fb
+Author: Vasja Laharnar <vl@plista.com>
+Date:   Tue Apr 26 16:40:46 2016 +0200
+
+    DEVDP-5207: added ->enableBucketVector(false)
+
+commit 01525c7f4ef87ffb95bdab6a0e1e47889f469922
+Merge: 31afbaf 42f3e3d
+Author: Alexander Palamarchuk <ap@plista.com>
+Date:   Tue Apr 26 13:04:24 2016 +0200
+
+    Merge branch 'mschw/DEVDP-5208' into 'next'
+
+    DEVDP-5208 make Countengagement and Widgetview work without Bucket Vector parameter
+
+
+
+    See merge request !109
+
+commit 3d6f94d24821c51058ed2a8a0ae40c4450892cf4
+Author: Vasja Laharnar <vl@plista.com>
+Date:   Tue Apr 26 11:42:30 2016 +0200
+
+    DEVDP-5207: if itemid is specified, the vast xml output gets handled by vastad class
+
+commit 42f3e3df32da0a5bad26a1c8a0cd9f5b64eb848e
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Mon Apr 25 20:23:00 2016 +0200
+
+    DEVDP-5208 make Countengagement and Widgetview work without Bucket Vector parameter
+
+commit 31afbafb7f16336c82e172c260a323fc6949fd41
+Merge: 427cf6b caeec0d
+Author: Alexander Palamarchuk <ap@plista.com>
+Date:   Mon Apr 25 10:15:44 2016 +0200
+
+    Merge branch 'mschw/DEVDP-4605' into 'next'
+
+    DEVDP-4605 do not call $context->setUserId if user does not accept cookies
+
+
+
+    See merge request !108
+
+commit caeec0d97acade57a4a8fbfbf217ec98a11d49d3
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 18:57:51 2016 +0200
+
+    DEVDP-4605 do not call $context->setUserId if user does not accept cookies
+
+commit 427cf6bcf271890234e3914b76d98e4bb18d5b50
+Merge: fc3684c 1b14049
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 14:29:21 2016 +0200
+
+    Merge branch 'mschw/DEVPLANET-586' into 'next'
+
+    DEVPLANET-586 allow to request widget by "title"
+
+
+
+    See merge request !107
+
+commit 1b14049532f83cdf8d5c2160b649aeee3e8bf78c
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 14:18:01 2016 +0200
+
+    DEVPLANET-586 allow to request widget by "title"
+
+commit fc3684cfc1316714b304649df9b6e937e5d25177
+Merge: 2be1842 f15c57d
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 13:48:38 2016 +0200
+
+    Merge branch 'mschw/DEVDP-5194' into 'next'
+
+    DEVDP-5194 RecommendationAPI unit test
+
+
+
+    See merge request !106
+
+commit f15c57dfec82ca93e2c0c44a18b681eff5b4aacd
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 13:36:04 2016 +0200
+
+    DEVDP-5171 resolve merge conflict
+
+commit 40ded5c2dd6f13c6f8fb4203f4e9eb88369fd1df
+Merge: 2d58f53 2be1842
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 13:33:23 2016 +0200
+
+    Merge branch 'next' into mschw/DEVDP-5194
+
+    Conflicts:
+        classes/Plista/Plugin/API/RecommendationAPI.php
+
+commit 2d58f53517791de713650d41a36a5890cf06c049
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Fri Apr 22 13:25:19 2016 +0200
+
+    DEVDP-5194 RecommendationAPI unit test
+
+commit 2be1842ad885234fb7667fdf9bdd9d0f4180a85a
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Fri Apr 22 11:35:36 2016 +0200
+
+    pubitem can be optional
+
+commit f9c6504622699fd5df318d9a2e91a7a42aa37f92
+Merge: 241eb34 203e92d
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Fri Apr 22 09:17:39 2016 +0200
+
+    Merge branch 'next' of gitlab.plista.com:dataeng/plista-plugin into next
+
+commit 241eb34b541bdcbae51c0ffd98df54eb86eb2000
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Fri Apr 22 09:17:23 2016 +0200
+
+    plista-plugin (3.10.9)
+
+commit 7d0a5208edc798542ddd4c2ebb205f05c6021bc4
+Author: Torben Brodt <torben.brodt@plista.com>
+Date:   Fri Apr 22 09:17:08 2016 +0200
+
+    fix getCategories
+
+commit 203e92d43b31de32a91d9ce9141d44385c5c3ab2
+Merge: 6c56977 9ddc400
+Author: Manuel Scharwenka <mschw@plista.com>
+Date:   Thu Apr 21 15:00:42 2016 +0200
+
+    Merge branch 'mschw/DEVDP-56' into 'next'
+
+    DEVDP-56 remove call to ConfigList::setListOptionObject
+
+
+
+    See merge request !105
+
