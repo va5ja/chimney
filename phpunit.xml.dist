@@ -10,8 +10,11 @@
          bootstrap="./tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Full Plista Chimney Test Suite">
-            <directory>./tests/Plista\Chimney/</directory>
+        <testsuite name="Plista Chimney unit testing suite">
+            <directory suffix="Test.php">./tests/unit/Chimney/</directory>
+        </testsuite>
+        <testsuite name="Plista Chimney integration testing suite">
+            <directory suffix="Test.php">./tests/integration/</directory>
         </testsuite>
     </testsuites>
 

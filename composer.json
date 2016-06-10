@@ -17,7 +17,9 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Plista\\Chimney\\Test\\": "tests/Chimney/"
+      "Plista\\Chimney\\Test\\Unit\\": "tests/unit/Chimney/",
+      "Plista\\Chimney\\Test\\Integration\\": "tests/integration/",
+      "Plista\\Chimney\\Test\\Fixture\\": "tests/fixtures/"
     }
   },
   "scripts": {

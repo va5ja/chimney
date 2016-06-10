@@ -16,6 +16,7 @@ if (function_exists('ini_set')) {
 // run the command application
 $application = new Application();
 $application->addCommands([
-	new Command\AboutCommand()
+	new Command\AboutCommand(),
+	new Command\MakeCommand()
 ]);
 $application->run();

@@ -1,0 +1,5 @@
+%PACKAGE_NAME% (%PACKAGE_VERSION%) stable; urgency=medium<EOL>
+
+{{ENTRIES}}
+
+ -- %RELEASER_NAME% <%RELEASER_EMAIL%>  %DATE::RFC2822%<EOL>

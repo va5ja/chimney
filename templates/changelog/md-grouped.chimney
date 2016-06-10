@@ -1,0 +1,10 @@
+<!-- This template is unsupported yet -->
+## [%PACKAGE_VERSION%] - %DATE::SQLDATE%<EOL>
+<CHANGE_GROUP::LOOP>
+### %CHANGE_GROUP_NAME%<EOL>
+<ENTRY::LOOP>
+- %ENTRY_SUBJECT% (from %AUTHOR_NAME% <%AUTHOR_EMAIL%>).<EOL>
+<ENTRY::END>
+%CHANGE_GROUP::END%
+<EOL>
+

@@ -1,0 +1,13 @@
+ (2.0.1) stable; urgency=medium
+
+
+plista-chimney (2.0.0) stable; urgency=medium
+
+  * Fixed bug 2 (from Vasya Pupkin <v.pupkin@example.net>).
+
+plista-chimney (1.5.45) stable; urgency=medium
+
+  * Added addition 1 (from John Doe <john.doe@example.net>).
+  * New feature 1 (from Vasya Pupkin <v.pupkin@example.net>).
+  * Deprecated method 1 (from Max Mustermann <max@example.net>).
+
