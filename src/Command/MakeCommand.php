@@ -44,16 +44,21 @@ class MakeCommand extends BaseCommand
         $this
            ->setName('make')
            ->setDescription('Make the changelog')
+           ->setDefinition(
+              [
+
+              ]
+           )
            ->addArgument(
               'type',
               InputArgument::REQUIRED,
-              'Set changelog type here'
+              'Changelog type. Currently supported types: debian'
            )
            ->addOption(
               'package',
               null,
               InputOption::VALUE_REQUIRED,
-              'Package name is mandatory when making a debian changelog'
+              'Package name. It is mandatory when making a debian changelog'
            )
            ->addOption(
               'changelog',
@@ -62,7 +67,8 @@ class MakeCommand extends BaseCommand
               'Changelog file location. Mandatory when run not ouf the parent folder of the repository'
            )
            ->setHelp(<<<EOT
-<info>php chimney make</info>
+The <info>make</info> command reads git log from the current folder's repository, generates a new
+release changelog based on it and adds it to the projects changelog. 
 EOT
            );
     }
@@ -96,14 +102,23 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $packageName = $this->getPackageName($input);
+        $changelogPath = $this->getChangelogPath($input);
+
         $templateLoader = new Template\Loader();
         switch ($input->getArgument('type')) {
             case 'debian':
                 $changelogUpdater = new DebianChangelogUpdater($templateLoader);
+                if (!$packageName) {
+                    $this->setError($output, "The \"package\" option must set when generating a debian changelog");
+                    return 255;
+                }
                 break;
             default:
-                throw new InvalidArgumentException("The changelog type is not recognized");
+                $this->setError($output, "The changelog type is not recognized");
+                return 255;
         }
+
 
         $command = new GitCommand(new CommandExecutor());
         $lastTag = $command->getLastTag();
@@ -122,7 +137,7 @@ EOT
         $author->setEmail($command->getUserEmail());
 
         $release = new Release($version, new DateTime('now'), $author);
-        $release->setPackageName($input->getOption('package'));
+        $release->setPackageName($packageName);
 
         $logOutput = $command->getLogAfterTag($lastTag);
 
@@ -142,15 +157,51 @@ EOT
         $logList->addSection($logSection);
 
         $changelogAddon = $changelogUpdater->append(
-           new ChangelogFile($this->getChangelogPath($input)),
+           new ChangelogFile($changelogPath),
            new Generator($logList, new Template\Markup())
         );
 
-        $outputMessage = "==========\nCHANGELOG:\n==========\n<info>{$changelogAddon}</info>";
+        $outputMessage = <<<"EOT"
+<info>====================
+Generated changelog:
+====================</info>
+{$changelogAddon}
+<comment>--------------------
+The changelog was added to $changelogPath. You don't need to edit it manually.</comment>
+
+EOT;
         if ($isBreaking) {
             $outputMessage .= "<error>The release contains breaking changes. The changelog can only be updated manually in this case.</error>";
         }
 
+        if ('debian' == $input->getArgument('type')) {
+            $outputMessage .= <<<"EOT"
+
+<info>=================
+Release commands:
+=================</info>
+git checkout next
+git pull
+git commit -am "{$packageName} ({$version->export()})"
+git push
+git checkout master
+git merge next
+git push
+<comment>-----------------
+Copy and paste these command into your console for quicker releasing.</comment>
+
+EOT;
+        }
+
         $output->writeln($outputMessage);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return mixed
+     */
+    protected function getPackageName(InputInterface $input)
+    {
+        return $input->getOption('package');
     }
 }

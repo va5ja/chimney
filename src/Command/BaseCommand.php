@@ -12,10 +12,22 @@
 namespace Plista\Chimney\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  *
  */
 abstract class BaseCommand extends Command
 {
+    /**
+     * @param OutputInterface $output
+     * @param string $errorMessage
+     */
+    protected function setError(OutputInterface $output, $errorMessage) {
+        $output->writeln(<<<EOT
+Errors occured:
+<error>{$errorMessage}</error>
+EOT
+        );
+    }
 }
