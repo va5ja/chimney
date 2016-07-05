@@ -4,9 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9da902416e506abfe43e3ea2d3eec71e",
-    "content-hash": "d2fc6448e262767cebe340073297a8c6",
+    "hash": "980ce402f2fbf7f726f9a450c68f3eee",
+    "content-hash": "0a27d6b1f78296709b79204be29c7c15",
     "packages": [
+        {
+            "name": "plista-dataeng/updep",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.plista.com:dataeng/updep.git",
+                "reference": "4be12c1881badfd370057355fc71bc8ca0bab522"
+            },
+            "type": "library",
+            "license": [
+                "Apache 2.0"
+            ],
+            "description": "Developer's little helper",
+            "time": "2016-07-05 10:43:22"
+        },
         {
             "name": "symfony/console",
             "version": "v3.1.0",
@@ -1135,8 +1150,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
+    "minimum-stability": "beta",
+    "stability-flags": {
+        "plista-dataeng/updep": 10
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
