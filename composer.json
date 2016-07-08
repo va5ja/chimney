@@ -1,6 +1,18 @@
 {
   "name": "plista/chimney",
   "description": "Console tool to ease building new versions of packages",
+  "keywords": ["changelog", "updater", "release"],
+  "authors": [
+    {
+      "name": "plista GmbH",
+      "homepage": "http://www.plista.com"
+    },
+    {
+      "name": "Alexander Palamarchuk",
+      "role": "Developer"
+    }
+  ],
+  "license": "Apache 2.0",
   "require": {
     "php": ">=5.5.0",
     "symfony/console": "^3.0",
