@@ -1,5 +1,5 @@
 {
-  "name": "plista/chimney",
+  "name": "plista-dataeng/chimney",
   "description": "Console tool to ease building new versions of packages",
   "keywords": ["changelog", "updater", "release"],
   "authors": [
