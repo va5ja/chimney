@@ -5,17 +5,54 @@ Plista Chimney is a console tool to ease building new versions of packages.
 ## Requirements
 
 1. Chimney is currently tested only in Linux.
-2. The project must be properly installed with [Composer](https://getcomposer.org/).
-3. To use the UpDep tool Composer must be [installed globally](https://getcomposer.org/doc/00-intro.md#globally), so be available to execute just as `composer ...` (without a full path).
+2. Git has to be installed and available via console as "git" command.
+3. The additional UpDep script maintains only projects that have Composer installed and configured.
 4. In the current implementation UpDep requires the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin to be installed in your Composer.
 
 ## Installation
 
+## Installation via Composer
+
+1. Add ``plista-dataeng/updep`` as a dependency to your project's ``composer.json`` file (change version to suit your version of Plista Chimney):
+    ```json
+        {
+            "require-dev": {
+                "plista-dataeng/chimney": "~1.0"
+            }
+        }
+    ```
+
+2. Download and install Composer:
+    ```bash
+        curl -s http://getcomposer.org/installer | php
+    ```
+
+3. Install your dependencies:
+    ```bash
+        php composer install
+    ```
+
+3. Go to the parent directory of your project.
+4. Run:
+    ```bash
+        vendor/bin/chimney
+    ```
+5. To run Plista UpDep call 
+    ```bash
+        vendor/bin/updep.sh
+    ```
+
+
+## Installation via Download
+
 1. Download this repository and put to a folder you would like to execute the tool from.
 2. Run `composer install` in project's directory.
-2. To use the UpDep tool properly configure [Composer](https://getcomposer.org/) and the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin in your project.
-3. Change dir to the parent directory of your project where composer.lock is located.
-4. Run `/path/to/chimney/bin/chimney` as a bash script.
+3. To use the UpDep tool properly configure [Composer](https://getcomposer.org/) and the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin in your project.
+4. Go to the parent directory of your project.
+5. Run in console:
+    ```bash
+        /path/to/chimney/bin/chimney
+    ```
 
 ## Usage
 ```
@@ -40,6 +77,8 @@ Help:
  The make command reads git log from the current folder's repository, generates a new
  release changelog based on it and adds it to the projects changelog. 
 ```
+### Plista UpDep
+Run `updep.sh --help` for help. 
 
 ## What does Plista Chimney do
 
