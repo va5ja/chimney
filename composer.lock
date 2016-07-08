@@ -4,23 +4,105 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "980ce402f2fbf7f726f9a450c68f3eee",
-    "content-hash": "0a27d6b1f78296709b79204be29c7c15",
+    "hash": "e059a555075808fb9a5fb5e121c9d01d",
+    "content-hash": "4f686f83dfab50a1c25c61aa1c9ad25d",
     "packages": [
         {
             "name": "plista-dataeng/updep",
-            "version": "1.0.0-beta1",
+            "version": "1.1.0-rc1",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.plista.com:dataeng/updep.git",
-                "reference": "4be12c1881badfd370057355fc71bc8ca0bab522"
+                "url": "https://github.com/plista/updep.git",
+                "reference": "eeb332764073bd4dda9b36274937792361307e3a"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plista/updep/zipball/eeb332764073bd4dda9b36274937792361307e3a",
+                "reference": "eeb332764073bd4dda9b36274937792361307e3a",
+                "shasum": ""
+            },
+            "require": {
+                "pyrech/composer-changelogs": "~1.5.0"
+            },
+            "bin": [
+                "bin/updep.sh"
+            ],
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache 2.0"
             ],
-            "description": "Developer's little helper",
-            "time": "2016-07-05 10:43:22"
+            "authors": [
+                {
+                    "name": "plista GmbH",
+                    "homepage": "http://www.plista.com"
+                },
+                {
+                    "name": "Alexander Palamarchuk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Plista UpDep - a bash tool to make the process of updating Composer dependencies automated",
+            "keywords": [
+                "dependency",
+                "release"
+            ],
+            "time": "2016-07-08 11:11:17"
+        },
+        {
+            "name": "pyrech/composer-changelogs",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyrech/composer-changelogs.git",
+                "reference": "0231ce257a90346aa5c436eb3edf28bc627b5d09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyrech/composer-changelogs/zipball/0231ce257a90346aa5c436eb3edf28bc627b5d09",
+                "reference": "0231ce257a90346aa5c436eb3edf28bc627b5d09",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "composer/composer": "~1.0.0-alpha10@dev",
+                "composer/semver": "1.2.0",
+                "fabpot/php-cs-fixer": "~1.5",
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Pyrech\\ComposerChangelogs\\ChangelogsPlugin",
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pyrech\\ComposerChangelogs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Loïck Piera",
+                    "email": "pyrech@gmail.com"
+                }
+            ],
+            "description": "Display changelogs after each composer update",
+            "keywords": [
+                "changelog",
+                "composer",
+                "plugin",
+                "update"
+            ],
+            "time": "2016-07-04 11:56:39"
         },
         {
             "name": "symfony/console",
@@ -1297,9 +1379,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "stability-flags": {
-        "plista-dataeng/updep": 10
+        "plista-dataeng/updep": 5
     },
     "prefer-stable": false,
     "prefer-lowest": false,
