@@ -1,6 +1,8 @@
 # Plista Chimney - Console tool to ease building new versions of packages
 
-Plista Chimney is a console tool to ease building new versions of packages.
+Plista Chimney is a PHP console tool to ease building new versions of packages. Basically it reads the git log of a project and composes a new changelog based on the latest unversioned changes. It also provides some assistance for commiting the changes and pushing them for building. One of the main of the goals of Chimney is to support release automation and become a part of continuous delivery process.
+
+Plista Chimney has a built-in feature of updating composer dependency assistance. It's maintained by a separate project Plista UpDep, but is a part of Chimney's distributive.
 
 ## Requirements
 
@@ -8,6 +10,7 @@ Plista Chimney is a console tool to ease building new versions of packages.
 2. Git has to be installed and available via console as "git" command.
 3. The additional UpDep script maintains only projects that have Composer installed and configured.
 4. In the current implementation UpDep requires the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin to be installed in your Composer.
+5. To make good use of Chimney you need to follow [Git message convention](http://chris.beams.io/posts/git-commit/).
 
 ## Installation
 
