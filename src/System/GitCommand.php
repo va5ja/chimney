@@ -51,7 +51,7 @@ class GitCommand implements GitCommandInterface
 
     /**
      * Converts trivial output contained as the first element of an array into a scalar value.
-     * @param $output
+     * @param string $output
      * @return string
      */
     private function formatTrivialOutput($output)
@@ -59,12 +59,24 @@ class GitCommand implements GitCommandInterface
         return (is_array($output) && isset($output[0])) ? $output[0] : '';
     }
 
+	/**
+	 * Executes the GIT command and returns the output as string.
+	 * Use this executor with GIT commands that output one line primitives.
+	 * @param string $parameters
+	 * @return string
+	 */
+	private function executeTriv($parameters)
+	{
+		return $this->formatTrivialOutput($this->execute($parameters));
+	}
+
     /**
      * {@inheritdoc}
      */
     public function getLastTag()
     {
-        return $this->formatTrivialOutput($this->execute('describe --abbrev=0'));
+		$lastTagId = $this->executeTriv('rev-list --tags --max-count=1');
+        return $this->executeTriv("describe --tags {$lastTagId}");
     }
 
     /**
@@ -82,7 +94,7 @@ class GitCommand implements GitCommandInterface
      */
     public function getUserName()
     {
-        return $this->formatTrivialOutput($this->execute('config --get user.name'));
+        return $this->executeTriv('config --get user.name');
     }
 
     /**
@@ -90,6 +102,6 @@ class GitCommand implements GitCommandInterface
      */
     public function getUserEmail()
     {
-        return $this->formatTrivialOutput($this->execute('config --get user.email'));
+        return $this->executeTriv('config --get user.email');
     }
 }
