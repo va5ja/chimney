@@ -36,7 +36,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MakeCommand extends BaseCommand
 {
-    /**
+	const EXIT_STATUS_ILLEGAL_COMMAND = 127;
+	const EXIT_STATUS_CHANGELOG_TYPE_UNKNOWN = 2;
+	const EXIT_STATUS_NO_CHANGES = 3;
+
+	/**
      * {@inheritdoc}
      */
     protected function configure()
@@ -111,12 +115,12 @@ EOT
                 $changelogUpdater = new DebianChangelogUpdater($templateLoader);
                 if (!$packageName) {
                     $this->setError($output, "The \"package\" option must set when generating a debian changelog");
-                    return 255;
+                    return self::EXIT_STATUS_ILLEGAL_COMMAND;
                 }
                 break;
             default:
                 $this->setError($output, "The changelog type is not recognized");
-                return 255;
+                return self::EXIT_STATUS_CHANGELOG_TYPE_UNKNOWN;
         }
 
 
