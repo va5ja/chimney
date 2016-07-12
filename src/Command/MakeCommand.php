@@ -182,9 +182,10 @@ Release commands:
 =================</info>
 git checkout next
 git pull
-git commit -am "{$packageName} ({$version->export()})"
+git commit -m "{$packageName} ({$version->export()})" {$changelogPath}
 git push
 git checkout master
+git pull
 git merge next
 git push
 <comment>-----------------
