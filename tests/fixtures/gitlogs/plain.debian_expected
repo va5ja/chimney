@@ -1,4 +1,4 @@
-%%PACKAGE_NAME%% (%%PACKAGE_VERSION%%) stable; urgency=medium
+%PACKAGE_NAME% (%PACKAGE_VERSION%) stable; urgency=medium
 
   * Add alias "focusing" for Campaign and Ad "targeting" field
   * Fix logical mistakes in targeting models hierarchy
@@ -11,5 +11,5 @@
   * Add SellerTargeting to ModelLog
   * Add SellerTargeting to ModelLog
 
- -- %%RELEASER_NAME%% <%%RELEASER_EMAIL%%>  %%DATE::RFC2822%%
+ -- %RELEASER_NAME% <%RELEASER_EMAIL%>  %DATE::RFC2822%
 

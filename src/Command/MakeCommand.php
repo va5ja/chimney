@@ -18,8 +18,7 @@ use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\Version;
-use Plista\Chimney\Export\ChangelogFile;
-use Plista\Chimney\Export\DebianChangelogUpdater;
+use Plista\Chimney\Export;
 use Plista\Chimney\Import\LogConverter;
 use Plista\Chimney\Import\LogParser;
 use Plista\Chimney\Import\VersionParser;
@@ -32,7 +31,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- *
+ * @todo To be refactored. Currently it's just an integration point, isn't tested at all.
  */
 class MakeCommand extends BaseCommand
 {
@@ -56,7 +55,7 @@ class MakeCommand extends BaseCommand
            ->addArgument(
               'type',
               InputArgument::REQUIRED,
-              'Changelog type. Currently supported types: debian'
+              'Changelog type. Currently supported types: debian, md'
            )
            ->addOption(
               'package',
@@ -91,6 +90,9 @@ EOT
             case 'debian':
                 $path = getcwd() . DIRECTORY_SEPARATOR . 'debian/changelog';
                 break;
+			case 'md':
+				$path = getcwd() . DIRECTORY_SEPARATOR . 'CHANGELOG.md';
+				break;
             default:
                 throw new InvalidArgumentException("The changelog type is not recognized");
         }
@@ -112,11 +114,14 @@ EOT
         $templateLoader = new Template\Loader();
         switch ($input->getArgument('type')) {
             case 'debian':
-                $changelogUpdater = new DebianChangelogUpdater($templateLoader);
+                $changelogUpdater = new Export\DebianChangelogUpdater($templateLoader);
                 if (!$packageName) {
                     $this->setError($output, "The \"package\" option must set when generating a debian changelog");
                     return self::EXIT_STATUS_ILLEGAL_COMMAND;
                 }
+                break;
+			case 'md':
+                $changelogUpdater = new Export\MdChangelogUpdater($templateLoader);
                 break;
             default:
                 $this->setError($output, "The changelog type is not recognized");
@@ -165,7 +170,7 @@ EOT
         $logList->addSection($logSection);
 
         $changelogAddon = $changelogUpdater->append(
-           new ChangelogFile($changelogPath),
+           new Export\ChangelogFile($changelogPath),
            new Generator($logList, new Template\Markup())
         );
 
@@ -181,13 +186,17 @@ EOT;
         if ($isBreaking) {
             $outputMessage .= "<error>The release contains breaking changes. The changelog can only be updated manually in this case.</error>";
         }
-
-        if ('debian' == $input->getArgument('type')) {
-            $outputMessage .= <<<"EOT"
+        
+        $outputMessage .= <<<"EOT"
 
 <info>=================
 Release commands:
 =================</info>
+
+EOT;
+        switch ($input->getArgument('type')) {
+            case 'debian':
+                $outputMessage .= <<<"EOT"
 git checkout next
 git pull
 git commit -m "{$packageName} ({$version->export()})" {$changelogPath}
@@ -200,11 +209,23 @@ git push
 Copy and paste these command into your console for quicker releasing.</comment>
 
 EOT;
+                break;
+            case 'md':
+                $outputMessage .= <<<"EOT"
+git commit -m "Update changelog #ign" {$changelogPath}
+git tag {$version->export()}
+git push
+git push --tags
+<comment>-----------------
+Copy and paste these command into your console for quicker releasing.</comment>
+
+EOT;
+                break;
         }
 
         $output->writeln($outputMessage);
     }
-
+    
     /**
      * @param InputInterface $input
      * @return mixed

@@ -4,6 +4,10 @@ Plista Chimney is a PHP console tool to ease building new versions of packages. 
 
 Plista Chimney has a built-in feature of updating composer dependency assistance. It's maintained by a separate project Plista UpDep, but is a part of Chimney's distributive.
 
+Currently supported changelog formats:
+* Debian
+* CHANGELOG.md
+
 ## Requirements
 
 1. Chimney is currently tested only in Linux.
@@ -63,7 +67,7 @@ Usage:
   make [options] [--] <type>
 
 Arguments:
-  type                         Changelog type. Currently supported types: debian
+  type                         Changelog type. Currently supported types: debian, md
 
 Options:
       --package=PACKAGE        Package name. It is mandatory when making a debian changelog

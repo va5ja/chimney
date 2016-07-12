@@ -15,8 +15,7 @@ use Plista\Chimney\Changelog\ChangelogList;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Changelog\Generator;
 use Plista\Chimney\Entity\Release;
-use Plista\Chimney\Changelog\Template\Loader;
-use Plista\Chimney\Changelog\Template\Markup;
+use Plista\Chimney\Changelog\Template;
 use Plista\Chimney\Entity\Version;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
@@ -31,14 +30,15 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     use FixtureProviderTrait;
 
-    /**
-     * @test
-     * @dataProvider provideReleaseData
-     * @param string $expected
-     * @param string $logOutput
-     * @param Release $release
-     */
-    public function makeChangelog($expected, $logOutput, Release $release)
+	/**
+	 * @test
+	 * @dataProvider provideReleaseData
+	 * @param string $expected
+	 * @param string $template
+	 * @param string $logOutput
+	 * @param Release $release
+	 */
+    public function makeChangelog($expected, $template, $logOutput, Release $release)
     {
         $section = new ChangelogSection($release);
         foreach ((new LogConverter($logOutput))->iterateEntries(new LogParser()) as $entry) {
@@ -48,10 +48,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $list = new ChangelogList();
         $list->addSection($section);
 
-        $generator = new Generator($list, new Markup());
+        $generator = new Generator($list, new Template\Markup());
         $this->assertEquals(
            $expected,
-           $generator->makeChangelog((new Loader())->loadDebian())
+           $generator->makeChangelog($template)
         );
     }
 
@@ -70,20 +70,36 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $logOutput = $this->getFixture('gitlogs/plain');
 
-        $expected = str_replace(
-           ['%%PACKAGE_NAME%%', '%%PACKAGE_VERSION%%', '%%RELEASER_NAME%%', '%%RELEASER_EMAIL%%', '%%DATE::RFC2822%%'],
-           [
-              $packageName,
-              $releaseVersion->export(),
-              $releaseAuthor->getName(),
-              $releaseAuthor->getEmail(),
-              $releaseDate->format('r')
-           ],
-           $this->getFixtureExpected('gitlogs/plain.debian')
-        );
-
         return [
-           [$expected, $logOutput, $release]
+           [
+               str_replace(
+                   ['%PACKAGE_NAME%', '%PACKAGE_VERSION%', '%RELEASER_NAME%', '%RELEASER_EMAIL%', '%DATE::RFC2822%'],
+                   [
+                       $packageName,
+                       $releaseVersion->export(),
+                       $releaseAuthor->getName(),
+                       $releaseAuthor->getEmail(),
+                       $releaseDate->format('r')
+                   ],
+                   $this->getFixtureExpected('gitlogs/plain.debian')
+               ),
+               (new Template\Loader())->loadDebian(),
+               $logOutput,
+               $release
+           ],
+            [
+                str_replace(
+                    ['%PACKAGE_VERSION%', '%DATE::SQLDATE%'],
+                    [
+                        $releaseVersion->export(),
+                        $releaseDate->format('Y-m-d')
+                    ],
+                    $this->getFixtureExpected('gitlogs/plain.md')
+                ),
+                (new Template\Loader())->loadMd(),
+                $logOutput,
+                $release
+            ],
         ];
     }
 }
