@@ -88,7 +88,32 @@ Help:
 Run `updep.sh --help` for help. 
 
 ## What does Plista Chimney do
+Example output after a successful program run:
+```
+$ bin/chimney make md
+====================
+Generated changelog:
+====================
+### 1.0.1 - 2016-07-12
 
+  * Release suppport for CHANGELOG.md (from Alexander Palamarchuk <a@palamarchuk.info>).
+  * Added some more description to README (from Alexander Palamarchuk <a@palamarchuk.info>).
+  * Fixed attempt to create a changelog when the requested git log is empty [#1] (from John Doe <john.doe@example.net)
+
+
+--------------------
+The changelog was added to /usr/share/chimney/CHANGELOG.md. You don't need to edit it manually.
+
+=================
+Release commands:
+=================
+git commit -m "Update changelog #ign" /usr/share/chimney/CHANGELOG.md
+git tag 1.0.1
+git push
+git push --tags
+-----------------
+Copy and paste these command into your console for quicker releasing.
+```
 
 ## Authors
 
