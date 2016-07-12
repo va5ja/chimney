@@ -1,3 +1,8 @@
+### 1.0.0-alpha6 - 2016-07-12
+
+  * Release suppport for CHANGELOG.md (from Alexander Palamarchuk <a@palamarchuk.info>).
+  * This section was created with help of Plista Chimney.
+
 ### 1.0.0-alpha5 - 2016-07-12
 
   * Added some more description to README.
