@@ -144,6 +144,10 @@ EOT
         $release->setPackageName($packageName);
 
         $logOutput = $command->getLogAfterTag($lastTag);
+		if ('' === trim($logOutput)) {
+			$this->setError($output, "No new changes detected");
+			return self::EXIT_STATUS_NO_CHANGES;
+		}
 
         $logSection = new ChangelogSection($release);
         $isBreaking = false;
