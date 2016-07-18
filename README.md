@@ -21,7 +21,7 @@ Currently supported changelog formats:
 ## Installation via Composer
 
 1. Add ``plista-dataeng/updep`` as a dependency to your project's ``composer.json`` file (change version to suit your version of Plista Chimney):
-    ```json
+    ``` json
         {
             "require-dev": {
                 "plista-dataeng/chimney": "~1.0"
@@ -30,22 +30,22 @@ Currently supported changelog formats:
     ```
 
 2. Download and install Composer:
-    ```bash
+    ``` bash
         curl -s http://getcomposer.org/installer | php
     ```
 
 3. Install your dependencies:
-    ```bash
+    ``` bash
         php composer install
     ```
 
 3. Go to the parent directory of your project.
 4. Run:
-    ```bash
+    ``` bash
         vendor/bin/chimney
     ```
 5. To run Plista UpDep call 
-    ```bash
+    ``` bash
         vendor/bin/updep.sh
     ```
 
@@ -57,7 +57,7 @@ Currently supported changelog formats:
 3. To use the UpDep tool properly configure [Composer](https://getcomposer.org/) and the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin in your project.
 4. Go to the parent directory of your project.
 5. Run in console:
-    ```bash
+    ``` bash
         /path/to/chimney/bin/chimney
     ```
 
@@ -84,6 +84,17 @@ Help:
  The make command reads git log from the current folder's repository, generates a new
  release changelog based on it and adds it to the projects changelog. 
 ```
+
+For example, for CHANGELOG.md:
+```
+bin/chimney make md
+```
+or, for Debian:
+```
+bin/chimney make debian --package=plista-dataeng-chimney
+```
+
+
 ### Plista UpDep
 Run `updep.sh --help` for help. 
 
