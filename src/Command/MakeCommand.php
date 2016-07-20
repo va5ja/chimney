@@ -14,14 +14,17 @@ use Plista\Chimney\Changelog\ChangelogList;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Changelog\Generator;
 use Plista\Chimney\Changelog\Template;
+use Plista\Chimney\Command\Make\AuthorLoader;
 use Plista\Chimney\Command\Make\ChangelogTypeCase;
 use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
+use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\OutputMessage;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\Version;
 use Plista\Chimney\Entity\VersionIncrementable;
+use Plista\Chimney\Entity\VersionIncrementor;
 use Plista\Chimney\Export;
 use Plista\Chimney\Import\LogConverter;
 use Plista\Chimney\Import\LogParser;
@@ -100,10 +103,16 @@ EOT
                 $path = getcwd() . DIRECTORY_SEPARATOR . 'CHANGELOG.md';
                 break;
             default:
-                throw new InvalidArgumentException("The changelog type is not recognized");
+                throw new ExitException(
+                    "The changelog type is not recognized",
+                    ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN
+                );
         }
         if (!file_exists($path)) {
-            throw new InvalidArgumentException("The changelog cannot be found. Run the program out the parent folder of the repository or pass it as parameter");
+            throw new ExitException(
+                "The changelog cannot be found. Run the program out the parent folder of the repository or pass it as parameter",
+                ExitException::STATUS_CHANGELOG_FILE_NOT_FOUND
+            );
         }
         return $path;
     }
@@ -115,8 +124,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $changelogUpdater = (new ChangelogUpdaterFactory())
-                ->create($input->getArgument('type'), new Template\Loader());
+            $outputMessage = new OutputMessage();
 
             $packageName = $this->getPackageName($input);
             if ($this->isDebian($input) && !$packageName) {
@@ -126,19 +134,14 @@ EOT
                 );
             }
 
-            $changelogPath = $this->getChangelogPath($input);
-
             $command = new GitCommand(new CommandExecutor());
+
             $lastTag = $command->getLastTag();
             $logOutput = $command->getLogAfterTag($lastTag);
 
             $version = $this->getVersion(new VersionParser($lastTag));
-            $this->incrementVersion($version);
 
-            $author = new Author();
-            $author->setName($command->getUserName());
-            $author->setEmail($command->getUserEmail());
-
+            $author = (new AuthorLoader())->load(new Author(), $command);
             $release = new Release($version, new DateTime('now'), $author);
             $release->setPackageName($packageName);
 
@@ -147,31 +150,28 @@ EOT
             }
 
             $logSection = new ChangelogSection($release);
-            $isBreaking = false;
             foreach ((new LogConverter($logOutput))->iterateEntries(new LogParser()) as $entry) {
-                if (!$isBreaking && $entry->isBreaking()) {
-                    $isBreaking = true;
-                }
-                if ($entry->isIgnore()) {
+                if ($entry->getChange()->isIgnore()) {
                     continue;
                 }
                 $logSection->addEntry($entry);
             }
 
+            (new VersionIncrementor($logSection))->increment($version);
+
             $logList = new ChangelogList();
             $logList->addSection($logSection);
 
-            $changelogAddon = $changelogUpdater->append(
-                new Export\ChangelogFile($changelogPath),
-                new Generator($logList, new Template\Markup())
-            );
 
-            $outputMessage = new OutputMessage();
+            $changelogPath = $this->getChangelogPath($input);
+            $changelogAddon = (new ChangelogUpdaterFactory())
+                ->create($input->getArgument('type'), new Template\Loader())
+                ->append(
+                    new Export\ChangelogFile($changelogPath),
+                    new Generator($logList, new Template\Markup())
+                );
 
             $outputMessage->appendChangelogInfo($changelogAddon, $changelogPath);
-            if ($isBreaking) {
-                $outputMessage->appendError('The release contains breaking changes. The changelog can only be updated manually in this case.');
-            }
 
             $outputMessage->appendHeader('Release commands:');
             switch ($input->getArgument('type')) {
@@ -244,11 +244,4 @@ EOT
         );
     }
 
-    /**
-     * @param VersionIncrementable $version
-     */
-    private function incrementVersion(VersionIncrementable $version)
-    {
-        $version->incPatch();
-    }
 }

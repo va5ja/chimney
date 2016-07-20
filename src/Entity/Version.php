@@ -106,6 +106,7 @@ class Version implements VersionExportable, VersionIncrementable
     public function incMinor()
     {
         $this->resetUnstable();
+        $this->patch = 0;
         $this->minor++;
     }
 
@@ -114,6 +115,8 @@ class Version implements VersionExportable, VersionIncrementable
      */
     public function incMajor()
     {
+        $this->patch = 0;
+        $this->minor = 0;
         $this->resetUnstable();
         $this->major++;
     }

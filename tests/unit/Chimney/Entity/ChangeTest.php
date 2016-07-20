@@ -34,6 +34,61 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function isBreaking()
+    {
+        $this->checkType('isBreaking', 'isBreaking');
+    }
+
+    /**
+     * @test
+     */
+    public function isIgnore()
+    {
+        $this->checkType('isIgnore', 'isIgnore');
+    }
+
+    /**
+     * @test
+     */
+    public function isFix()
+    {
+        $this->checkType('isFix', 'isFix');
+    }
+
+    /**
+     * @test
+     */
+    public function isFeature()
+    {
+        $this->checkType('isNew', 'isFeature');
+    }
+
+    /**
+     * @test
+     */
+    public function isDelete()
+    {
+        $this->checkType('isRemove', 'isDelete');
+    }
+
+    /**
+     * @test
+     */
+    public function isUpdate()
+    {
+        $this->checkType('isUpdate', 'isUpdate');
+    }
+
+    /**
+     * @test
+     */
+    public function isDeprecate() {
+        $this->checkType('isDeprecate', 'isDeprecate');
+    }
+
+    /**
+     * @test
      * @dataProvider provideTypes
      * @param string $subjectType
      * @param ChangeType $type
@@ -45,42 +100,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
-     */
-    public function isBreaking()
-    {
-        $typeBreakingProphet = $this->prophesize(ChangeTypeInterface::class);
-        $typeBreakingProphet->isBreaking()->willReturn(true);
-        $typeNotbreakingProphet = $this->prophesize(ChangeTypeInterface::class);
-        $typeNotbreakingProphet->isBreaking()->willReturn(false);
-
-        $this->assertTrue(
-           (new Change('Do something', $typeBreakingProphet->reveal()))->isBreaking()
-        );
-        $this->assertFalse(
-           (new Change('Do something', $typeNotbreakingProphet->reveal()))->isBreaking()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function isIgnore()
-    {
-        $typeBreakingProphet = $this->prophesize(ChangeTypeInterface::class);
-        $typeBreakingProphet->isIgnore()->willReturn(true);
-        $typeNotbreakingProphet = $this->prophesize(ChangeTypeInterface::class);
-        $typeNotbreakingProphet->isIgnore()->willReturn(false);
-
-        $this->assertTrue(
-           (new Change('Do something', $typeBreakingProphet->reveal()))->isIgnore()
-        );
-        $this->assertFalse(
-           (new Change('Do something', $typeNotbreakingProphet->reveal()))->isIgnore()
-        );
-    }
-
-    /**
+     * Data provider.
      * @return array
      */
     public function provideTypes()
@@ -136,5 +156,32 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
            ['security', $typeSecurity],
            ['security, critical', $typeSecurityBreaking],
         ];
+    }
+
+    /**
+     * @param string $methodName
+     * @param mixed $result
+     * @return ChangeTypeInterface
+     */
+    private function getTypeProphecized($methodName, $result) {
+        $prophet = $this->prophesize(ChangeTypeInterface::class);
+        $prophet->{$methodName}()->willReturn($result);
+        return $prophet->reveal();
+    }
+
+    /**
+     * Asserts that change type is qualified correctly.
+     * @param string $typeMethodName
+     * @param string $changeMethodName
+     */
+    private function checkType($typeMethodName, $changeMethodName) {
+        $this->assertTrue(
+            (new Change('Do something', $this->getTypeProphecized($typeMethodName, true)))
+                ->{$changeMethodName}()
+        );
+        $this->assertFalse(
+            (new Change('Do something', $this->getTypeProphecized($typeMethodName, false)))
+                ->{$changeMethodName}()
+        );
     }
 }

@@ -232,13 +232,14 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $rcVer = new Version(0, 0, 1);
         $rcVer->setReleaseCandidate(3);
         return [
-           ['0.0.1', '0.1.0', '1.0.0', new Version(0, 0, 0)],
-           ['1.0.3', '1.1.2', '2.0.2', new Version(1, 0, 2)],
-           ['1.1.2', '1.2.1', '2.1.1', new Version(1, 1, 1)],
+            // [patch, minor, major, ...]
+            ['0.0.1', '0.1.0', '1.0.0', new Version(0, 0, 0)],
+            ['1.0.3', '1.1.0', '2.0.0', new Version(1, 0, 2)],
+            ['1.1.2', '1.2.0', '2.0.0', new Version(1, 1, 1)],
             // incrementing versions resets alpha/beta/rc status
-           ['1.0.1', '1.1.0', '2.0.0', $alphaVer],
-           ['0.1.1', '0.2.0', '1.1.0', $betaVer],
-           ['0.0.2', '0.1.1', '1.0.1', $rcVer]
+            ['1.0.1', '1.1.0', '2.0.0', $alphaVer],
+            ['0.1.1', '0.2.0', '1.0.0', $betaVer],
+            ['0.0.2', '0.1.0', '1.0.0', $rcVer]
         ];
     }
 

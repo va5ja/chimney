@@ -12,7 +12,8 @@
 namespace Plista\Chimney\Entity;
 
 /**
- *
+ * Note that the ideology of this interface is to not take any validation responsibility for the combination
+ *   of the change types. It's the matter of interpretaion which combination is allowed or not.
  */
 interface ChangeInterface
 {
@@ -39,4 +40,34 @@ interface ChangeInterface
      * @return bool
      */
     public function isIgnore();
+
+    /**
+     * Tells if the change carries a fix.
+     * @return bool
+     */
+    public function isFix();
+
+    /**
+     * Tells if the change carries a new feature.
+     * @return bool
+     */
+    public function isFeature();
+
+    /**
+     * Tells if the change carries a deletion of (normally previously deprecated) features.
+     * @return bool
+     */
+    public function isDelete();
+
+    /**
+     * Tells if the change carries updates that are not expected to affect the functionality (e.g. patch updates in dependencies or refactoring).
+     * @return bool
+     */
+    public function isUpdate();
+
+    /**
+     * Tells if the change introduces deprecations.
+     * @return bool
+     */
+    public function isDeprecate();
 }

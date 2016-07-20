@@ -97,4 +97,39 @@ class Change implements ChangeInterface
     {
         return $this->type->isIgnore();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFix() {
+        return $this->type->isFix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFeature() {
+        return $this->type->isNew();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDelete() {
+        return $this->type->isRemove();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUpdate() {
+        return $this->type->isUpdate();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDeprecate() {
+        return $this->type->isDeprecate();
+    }
 }

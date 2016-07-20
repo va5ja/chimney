@@ -32,7 +32,10 @@ class MakeCommandTest extends TestCase
      */
     public function execute_wrongType()
     {
-        $commandTester = $this->executeCommand(['type' => 'some_wrong_type']);
+        $commandTester = $this->executeCommand([
+            'type' => 'some_wrong_type',
+            //'name' => 'debian'
+        ]);
         $this->assertEquals(
             ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN,
             $commandTester->getStatusCode()

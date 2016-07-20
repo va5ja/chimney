@@ -1,10 +1,10 @@
 Fri Jul 1 12:56:41 2016 +0200[::]John Doe[::]john.doe@example.net[::]Add alias "focusing" for Campaign and Ad "targeting" field #new
 Wed Jun 22 15:48:32 2016 +0200[::]Vasily Pupkin[::]v.pupkin@example.net[::]Fix logical mistakes in targeting models hierarchy #new #brk
-Wed Jun 22 11:36:32 2016 +0200[::]John Doe[::]john.doe@example.net[::]Fix Targeting model doesn't refresh the hash on updates #fix
+Wed Jun 22 11:36:32 2016 +0200[::]John Doe[::]john.doe@example.net[::]Fix Targeting model doesn't refresh the hash on updates #fix [#455]
 Mon Jun 20 13:28:06 2016 +0200[::]Max Mustermann[::]max28@example.net[::]Remove caching out of Campaign and Targeting models #fix
 Thu Jun 16 18:36:21 2016 +0200[::][::]john.doe@example.net[::]Fix a bug in Targeting::findByProfile() #fix
 Thu Jun 16 17:47:54 2016 +0200[::]John Doe[::]john.doe@example.net[::]Locate and modify XML targeting toolkit moved from Model\Targeting #new
 Wed Jun 15 10:00:03 2016 +0200[::]Vasily Pupkin[::]v.pupkin@example.net[::]Fix unit tests #ign
-Tue Jun 14 15:50:03 2016 +0200[::]Max Mustermann[::]max28@example.net[::]Fix wrong return type from Targeting::findByProfile() #fix
+Tue Jun 14 15:50:03 2016 +0200[::]Max Mustermann[::]max28@example.net[::]Fix wrong return type from Targeting::findByProfile() #fix [DEVDA-151]
 Tue Jun 14 14:43:39 2016 +0200[::]Max Mustermann[::]max28@example.net[::]Add SellerTargeting to ModelLog #new
 Tue Jun 14 14:43:39 2016 +0200[::]John Doe[::]john.doe@example.net[::]Add SellerTargeting to ModelLog #new

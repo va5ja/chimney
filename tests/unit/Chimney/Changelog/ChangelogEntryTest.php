@@ -35,6 +35,15 @@ class ChangelogEntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function getChange() {
+        $change = $this->prophesize(ChangeInterface::class)->reveal();
+        $entry = new ChangelogEntry($change);
+        $this->assertEquals($change, $entry->getChange());
+    }
+
+    /**
+     * @test
+     */
     public function settersChain()
     {
         $change = $this->prophesize(ChangeInterface::class);
@@ -96,39 +105,4 @@ class ChangelogEntryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($change->getSubject(), $entry->translatePlaceholder('ENTRY_SUBJECT'));
     }
 
-    /**
-     * @test
-     */
-    public function isBreaking()
-    {
-        $changeBreakingProphet = $this->prophesize(ChangeInterface::class);
-        $changeBreakingProphet->isBreaking()->willReturn(true);
-        $changeNotbreakingProphet = $this->prophesize(ChangeInterface::class);
-        $changeNotbreakingProphet->isBreaking()->willReturn(false);
-
-        $this->assertTrue(
-           (new ChangelogEntry($changeBreakingProphet->reveal()))->isBreaking()
-        );
-        $this->assertFalse(
-           (new ChangelogEntry($changeNotbreakingProphet->reveal()))->isBreaking()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function isIgnore()
-    {
-        $changeBreakingProphet = $this->prophesize(ChangeInterface::class);
-        $changeBreakingProphet->isIgnore()->willReturn(true);
-        $changeNotbreakingProphet = $this->prophesize(ChangeInterface::class);
-        $changeNotbreakingProphet->isIgnore()->willReturn(false);
-
-        $this->assertTrue(
-           (new ChangelogEntry($changeBreakingProphet->reveal()))->isIgnore()
-        );
-        $this->assertFalse(
-           (new ChangelogEntry($changeNotbreakingProphet->reveal()))->isIgnore()
-        );
-    }
 }

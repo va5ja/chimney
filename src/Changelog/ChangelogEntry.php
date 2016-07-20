@@ -45,6 +45,13 @@ class ChangelogEntry implements FormattableInterface, TimeComparableInterface
     }
 
     /**
+     * @return ChangeInterface
+     */
+    public function getChange() {
+        return $this->change;
+    }
+
+    /**
      * @param AuthorInterface $author
      * @return $this
      */
@@ -106,21 +113,5 @@ class ChangelogEntry implements FormattableInterface, TimeComparableInterface
             default:
                 throw new Exception("Placeholder \"{$placeholder}\" is unknown to ChangelogEntry");
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBreaking()
-    {
-        return $this->change->isBreaking();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isIgnore()
-    {
-        return $this->change->isIgnore();
     }
 }

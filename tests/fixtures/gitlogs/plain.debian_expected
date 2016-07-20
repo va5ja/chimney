@@ -2,12 +2,12 @@
 
   * Add alias "focusing" for Campaign and Ad "targeting" field
   * Fix logical mistakes in targeting models hierarchy
-  * Fix Targeting model doesn't refresh the hash on updates
+  * Fix Targeting model doesn't refresh the hash on updates [#455]
   * Remove caching out of Campaign and Targeting models
   * Fix a bug in Targeting::findByProfile()
   * Locate and modify XML targeting toolkit moved from Model\Targeting
   * Fix unit tests
-  * Fix wrong return type from Targeting::findByProfile()
+  * Fix wrong return type from Targeting::findByProfile() [DEVDA-151]
   * Add SellerTargeting to ModelLog
   * Add SellerTargeting to ModelLog
 
