@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc7a42b4e100296867fff5a947627179",
-    "content-hash": "9412ae54e1e4805203b77615d81dfdb8",
+    "hash": "5f3ebfa0ea8bd52cde509794ad47126e",
+    "content-hash": "a575ba86389e12e2ac841485dee78410",
     "packages": [
         {
             "name": "plista-dataeng/updep",
-            "version": "1.2.0-rc1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plista/updep.git",
-                "reference": "a95497b20eb9f369cb10a617e1c5dab06954e329"
+                "reference": "20f9c86fc45b2b8c4d9cf3ef516774f1c27854aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/plista/updep/zipball/a95497b20eb9f369cb10a617e1c5dab06954e329",
-                "reference": "a95497b20eb9f369cb10a617e1c5dab06954e329",
+                "url": "https://api.github.com/repos/plista/updep/zipball/20f9c86fc45b2b8c4d9cf3ef516774f1c27854aa",
+                "reference": "20f9c86fc45b2b8c4d9cf3ef516774f1c27854aa",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 "dependency",
                 "release"
             ],
-            "time": "2016-07-08 15:38:26"
+            "time": "2016-07-20 17:51:21"
         },
         {
             "name": "pyrech/composer-changelogs",
@@ -1380,9 +1380,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "plista-dataeng/updep": 5
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
