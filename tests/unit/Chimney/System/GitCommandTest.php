@@ -45,7 +45,7 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
 		$tagId = '0aa480ad1b3ab86ee99d2428eb7fd7c613d87907';
 		$this->executorProphet->execute('git', 'rev-list --tags --max-count=1')
 			->shouldBeCalledTimes(1)->willReturn($this->formatOutputForExec($tagId));
-        $this->executorProphet->execute('git', "describe --tags {$tagId}")
+        $this->executorProphet->execute('git', "describe --tags --abbrev=0 {$tagId}")
            ->shouldBeCalledTimes(1)->willReturn($this->formatOutputForExec($tag));
         $result = (new GitCommand($this->executorProphet->reveal()))->getLastTag();
         $this->assertEquals($tag, $result);

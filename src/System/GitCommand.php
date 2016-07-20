@@ -59,24 +59,24 @@ class GitCommand implements GitCommandInterface
         return (is_array($output) && isset($output[0])) ? $output[0] : '';
     }
 
-	/**
-	 * Executes the GIT command and returns the output as string.
-	 * Use this executor with GIT commands that output one line primitives.
-	 * @param string $parameters
-	 * @return string
-	 */
-	private function executeTriv($parameters)
-	{
-		return $this->formatTrivialOutput($this->execute($parameters));
-	}
+    /**
+     * Executes the GIT command and returns the output as string.
+     * Use this executor with GIT commands that output one line primitives.
+     * @param string $parameters
+     * @return string
+     */
+     private function executeTriv($parameters)
+     {
+         return $this->formatTrivialOutput($this->execute($parameters));
+     }
 
     /**
      * {@inheritdoc}
      */
     public function getLastTag()
     {
-		$lastTagId = $this->executeTriv('rev-list --tags --max-count=1');
-        return $this->executeTriv("describe --tags {$lastTagId}");
+        $lastTagId = $this->executeTriv('rev-list --tags --max-count=1');
+        return $this->executeTriv("describe --tags --abbrev=0 {$lastTagId}");
     }
 
     /**
