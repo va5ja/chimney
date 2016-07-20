@@ -59,15 +59,25 @@ class SubjectParserTest extends \PHPUnit_Framework_TestCase
     public function provideSubjects()
     {
         return [
-           [
-              'Add mapping for desktop targeting #new #brk',
-              'Add mapping for desktop targeting',
-              ['new', 'brk']
+            [
+                'Add mapping for desktop targeting #new #brk',
+                'Add mapping for desktop targeting',
+                ['new', 'brk']
+            ],
+            [
+                'Fix a targeting bug when a wrong export object was accessed #fix',
+                'Fix a targeting bug when a wrong export object was accessed',
+                ['fix']
+            ],
+            [
+                'Fix something #12345 #fix',
+                'Fix something #12345',
+                ['fix']
            ],
            [
-              'Fix a targeting bug when a wrong export object was accessed #fix',
-              'Fix a targeting bug when a wrong export object was accessed',
-              ['fix']
+                'Fix something #fix DEVDP-322',
+                'Fix something DEVDP-322',
+                ['fix']
            ]
         ];
     }
