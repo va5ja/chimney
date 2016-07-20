@@ -15,6 +15,7 @@ Currently supported changelog formats:
 3. The additional UpDep script maintains only projects that have Composer installed and configured.
 4. In the current implementation UpDep requires the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin to be installed in your Composer.
 5. To make good use of Chimney you need to follow [Git message convention](http://chris.beams.io/posts/git-commit/).
+6. To make Chimney able to increment automatically minor and major versions you need to follow the [tagging convention](#tagging-commits).
 
 ## Installation
 
@@ -94,6 +95,48 @@ or, for Debian:
 bin/chimney make debian --package=plista-dataeng-chimney
 ```
 
+## Tagging commits
+It is important to classify changes you bring into projects. It is recommended to use special tags in your git commit messages if Plista Chimney is a part of releasing process. Among other conveniences tags allow to typify releases according to semantic versioning (major, minor, patch), which is a very important thing in Continuous Delivery.
+
+Tags supported by Chimney are always _prefixed with #_ sign. There may be multiple different tags per commit, in this case they must be separated with a space. Preferably tags should be placed at the end of the subject line, but it can be recognized on any position _in the subject_.
+
+Tags are case-insensitive, but preferably should be written in lowercase.
+
+It is recommended to enclose issue tracker references in brackets. But no worries if use put e.g. Github issue references without brackets, they will just be ignored. 
+
+Possible tags are:
+
+* **fix**: for bugfixes.
+* **new**, **add**: for new features,
+* **upd**, **update**: for updated dependencies or changes in existing functionality,
+* **dpr**, **deprecate**: for once-stable features to be removed in upcoming releases,
+* **del**, **remove**: for deprecated features removed in this release,
+* **sec**, **security**: for security updates,
+* **brk**, **breaking**: any BC breaking change that requires a major release,
+* **ign**, **ignore**: for messages to be ignored in project's changelog history.
+
+If you skip the tag in your commit then no lines will be picked up for the changelog.
+
+Please keep in mind when tagging, that you should not classify with tags all possible commits. Tags are only used to include your change to project's changelog automatically. If it's a fix relates to a feature you haven't released yet it should be left in repository's history, but should not go to the changelog. Please always adjust the level of messages you target on the projects (not your merge request branches) level.
+
+If you do not use tagging Chimney will not be able to increment minor and major versions automatically and will always increment the patch number. All the rest will work without any issues.  
+
+### Tagging examples 
+
+#### Example 1
+```
+Send the tracking cookie information before output starts [DEVDP-5200] #fix
+
+Due to a bug in an integration test a critical bug passed the automatic control. This fix solves
+the issue on the level of controller architecture.
+```
+
+#### Example 2
+```
+Switch to Toogle API v2.0 [#128] #new #breaking
+
+The brand-new Toogle v2.0 is fully supported now. There is no backward-compatibility with Toogle v1.*.
+```
 
 ### Plista UpDep
 Run `updep.sh --help` for help. 
