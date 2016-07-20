@@ -14,7 +14,7 @@ namespace Plista\Chimney\Entity;
 /**
  *
  */
-class Version implements VersionInterface
+class Version implements VersionExportable, VersionIncrementable
 {
     const SEPARATOR = '.';
     const PRERELEASE_SEPARATOR = '-';
@@ -92,8 +92,7 @@ class Version implements VersionInterface
     }
 
     /**
-     * Increments the version patch.
-     * Note this incremention resets any alpha/beta/rc statuses.
+     * {@inheritdoc}
      */
     public function incPatch()
     {
@@ -102,8 +101,7 @@ class Version implements VersionInterface
     }
 
     /**
-     * Increments the version minor.
-     * Note this incremention resets any alpha/beta/rc statuses.
+     * {@inheritdoc}
      */
     public function incMinor()
     {
@@ -112,6 +110,16 @@ class Version implements VersionInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function incMajor()
+    {
+        $this->resetUnstable();
+        $this->major++;
+    }
+
+    /**
+     * Gets the [major].[minor].[patch] part of a semantic version.
      * @return string
      */
     private function getBase()
@@ -119,6 +127,10 @@ class Version implements VersionInterface
         return $this->major . self::SEPARATOR . $this->minor . self::SEPARATOR . $this->patch;
     }
 
+    /**
+     * Gets the pre-release part of a semantic version.
+     * @return string
+     */
     private function getPrerelease()
     {
         if (!is_null($this->alpha) && !is_null($this->beta)) {

@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @copyright plista GmbH
+ *
  */
 class AboutCommand extends BaseCommand
 {

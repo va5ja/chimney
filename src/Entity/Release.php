@@ -14,7 +14,7 @@ namespace Plista\Chimney\Entity;
 class Release implements ReleaseInterface
 {
     /**
-     * @var Version
+     * @var VersionExportable
      */
     protected $version;
     /**
@@ -32,11 +32,11 @@ class Release implements ReleaseInterface
 
     /**
      * Release constructor.
-     * @param VersionInterface $version
+     * @param VersionExportable $version
      * @param DateTimeInterface $datetime
      * @param AuthorInterface $author
      */
-    public function __construct(VersionInterface $version, DateTimeInterface $datetime, AuthorInterface $author)
+    public function __construct(VersionExportable $version, DateTimeInterface $datetime, AuthorInterface $author)
     {
         $this->version = $version;
         $this->datetime = $datetime;

@@ -14,7 +14,7 @@ namespace Plista\Chimney\Test\Unit\Entity;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\AuthorInterface;
 use Plista\Chimney\Entity\DateTimeInterface;
-use Plista\Chimney\Entity\VersionInterface;
+use Plista\Chimney\Entity\VersionExportable;
 
 /**
  *
@@ -27,7 +27,7 @@ class ReleaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->versionProphet = $this->prophesize(VersionInterface::class);
+        $this->versionProphet = $this->prophesize(VersionExportable::class);
         $this->datetimeProphet = $this->prophesize(DateTimeInterface::class);
         $this->authorProphet = $this->prophesize(AuthorInterface::class);
     }

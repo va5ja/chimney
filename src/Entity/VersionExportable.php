@@ -11,7 +11,10 @@
 
 namespace Plista\Chimney\Entity;
 
-interface VersionInterface
+/**
+ * Declares a version to be exportable.
+ */
+interface VersionExportable
 {
     /**
      * @return string

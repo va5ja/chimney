@@ -20,15 +20,15 @@ use Plista\Chimney\Changelog\GeneratorInterface;
 abstract class ChangelogUpdater implements ChangelogUpdaterInterface
 {
     /**
-     * @var Template\Loader
+     * @var Template\LoaderInterface
      */
     protected $templateLoader;
 
     /**
      * DebianChangelogUpdater constructor.
-     * @param Template\Loader $templateLoader
+     * @param Template\LoaderInterface $templateLoader
      */
-    public function __construct(Template\Loader $templateLoader)
+    public function __construct(Template\LoaderInterface $templateLoader)
     {
         $this->templateLoader = $templateLoader;
     }
