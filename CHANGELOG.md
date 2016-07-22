@@ -1,6 +1,14 @@
+### 1.1.0-beta1 - 2016-07-22
+
+  * Added option to allow major releases. By default only minor and patch ones are possible.
+  * Added post-run scripts with placeholders (so the "Chimney" step of Contnious Delivery can be fully automated).
+  * Added incrementing minor and major versions.
+  * Updated plista-dataeng/updep updated from 1.2.0-rc1 to 1.2.0.
+  * Fixed tags might be extracted with a hash appended.
+
 ### 1.0.0-alpha6 - 2016-07-12
 
-  * Release suppport for CHANGELOG.md (from Alexander Palamarchuk <a@palamarchuk.info>).
+  * Release suppport for CHANGELOG.md .
   * This section was created with help of Plista Chimney.
 
 ### 1.0.0-alpha5 - 2016-07-12

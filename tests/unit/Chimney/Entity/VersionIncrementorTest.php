@@ -16,7 +16,6 @@ use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Entity\ChangeInterface;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\ReleaseInterface;
-use Plista\Chimney\Entity\Version;
 use Plista\Chimney\Entity\VersionIncrementable;
 use Plista\Chimney\Entity\VersionIncrementor;
 
@@ -30,12 +29,18 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
      */
     private $section;
     /**
+     * @var VersionIncrementor
+     */
+    private $incrementor;
+
+    /**
      * @var int Entries counter.
      */
     private $entryCount = 0;
 
     protected function setUp() {
         $this->section = new ChangelogSection($this->prophesize(ReleaseInterface::class)->reveal());
+        $this->incrementor = new VersionIncrementor($this->section);
     }
 
     /**
@@ -86,6 +91,19 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
             'isDelete' => true,
         ]));
         $this->checkExpectedMajor();
+    }
+
+    /**
+     * @test
+     */
+    public function increment_majorProhibited()
+    {
+        $this->incrementor->denyMajor();
+        $this->addEntry($this->getEntry([
+            'isBreaking' => true,
+            'isDelete' => true,
+        ]));
+        $this->checkExpectedMinor();
     }
 
     /**
@@ -195,13 +213,6 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return VersionIncrementor
-     */
-    private function createIncrementor() {
-        return new VersionIncrementor($this->section);
-    }
-
-    /**
      *
      */
     private function checkExpectedMajor() {
@@ -210,7 +221,7 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
         $version->incMinor()->shouldNotBeCalled();
         $version->incPatch()->shouldNotBeCalled();
 
-        $this->createIncrementor()->increment($version->reveal());
+        $this->incrementor->increment($version->reveal());
     }
 
     /**
@@ -222,7 +233,7 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
         $version->incMinor()->shouldBeCalled();
         $version->incPatch()->shouldNotBeCalled();
 
-        $this->createIncrementor()->increment($version->reveal());
+        $this->incrementor->increment($version->reveal());
     }
 
     /**
@@ -234,6 +245,6 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
         $version->incMinor()->shouldNotBeCalled();
         $version->incPatch()->shouldBeCalled();
 
-        $this->createIncrementor()->increment($version->reveal());
+        $this->incrementor->increment($version->reveal());
     }
 }

@@ -33,6 +33,14 @@ class OutputMessage
     }
 
     /**
+     * Appends a text trailed by the end-of-line to the output message.
+     * @param string $text
+     */
+    public function appendN($text) {
+        $this->append($text . PHP_EOL);
+    }
+
+    /**
      * Appends a header to the output message.
      * @param string $text
      */

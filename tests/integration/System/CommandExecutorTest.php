@@ -23,13 +23,17 @@ class CommandExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function execute_listDir()
     {
-        $executor = new CommandExecutor();
-
-        $filesExpected = $this->listDir(__DIR__);
-        sort($filesExpected);
-        $filesGiven = $executor->execute('ls', __DIR__);
+        $filesGiven = (new CommandExecutor())->execute('ls', __DIR__);
         sort($filesGiven);
-        $this->assertEquals($filesExpected, $filesGiven);
+        $this->assertEquals($this->listDir(__DIR__), $filesGiven);
+    }
+
+    /**
+     * @test
+     */
+    public function execute_emptyParameters()
+    {
+        $this->assertNotEmpty((new CommandExecutor())->execute('ls', ''), 'Default argument');
     }
 
     /**
@@ -47,6 +51,7 @@ class CommandExecutorTest extends \PHPUnit_Framework_TestCase
             }
             closedir($handle);
         }
+        sort($files);
         return $files;
     }
 }

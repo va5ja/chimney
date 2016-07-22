@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Plista Chimney.
  *
@@ -19,11 +20,12 @@ use Plista\Chimney\Command\Make\ChangelogTypeCase;
 use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
 use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\OutputMessage;
+use Plista\Chimney\Command\Make\PlaceholderManager;
+use Plista\Chimney\Command\Make\ScriptExecutor;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\Version;
-use Plista\Chimney\Entity\VersionIncrementable;
 use Plista\Chimney\Entity\VersionIncrementor;
 use Plista\Chimney\Export;
 use Plista\Chimney\Import\LogConverter;
@@ -31,7 +33,6 @@ use Plista\Chimney\Import\LogParser;
 use Plista\Chimney\Import\VersionParser;
 use Plista\Chimney\System\CommandExecutor;
 use Plista\Chimney\System\GitCommand;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,45 +43,53 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MakeCommand extends BaseCommand
 {
+    const NAME = 'make';
+    const ARG_TYPE = 'type';
+    const OPT_PACKAGE = 'package';
+    const OPT_CHANGELOG = 'changelog';
+    const OPT_ALLOW_MAJOR = 'major';
+    const OPT_POSTRUN = 'post-run';
+
 	/**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-           ->setName('make')
-           ->setDescription('Make the changelog')
-           ->setDefinition(
-              [
-
-              ]
-           )
-           ->addArgument(
-              'type',
-              InputArgument::REQUIRED,
-              'Changelog type. Currently supported types: debian, md'
-           )
-           ->addOption(
-              'package',
-              null,
-              InputOption::VALUE_REQUIRED,
-              'Package name. It is mandatory when making a debian changelog'
-           )
-           ->addOption(
-              'changelog',
-              null,
-              InputOption::VALUE_OPTIONAL,
-              'Changelog file location. Mandatory when run not ouf the parent folder of the repository'
-           )
-			  ->addOption(
-				  'post-run',
-				  null,
-				  InputOption::VALUE_OPTIONAL,
-				  'A script to be run right after Chimney finishes its work. This will decrease the verbosity'
-			  )
-           ->setHelp(<<<EOT
-The <info>make</info> command reads git log from the current folder's repository, generates a new
-release changelog based on it and adds it to the projects changelog. 
+            ->setName(self::NAME)
+            ->setDescription('Make the changelog')
+            ->setDefinition([])
+            ->addArgument(
+                self::ARG_TYPE,
+                InputArgument::REQUIRED,
+                'Changelog type. Currently supported types: debian, md'
+            )
+            ->addOption(
+                self::OPT_PACKAGE,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Package name. It is mandatory when making a debian changelog'
+            )
+            ->addOption(
+                self::OPT_CHANGELOG,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Changelog file location. Mandatory when run not ouf the parent folder of the repository'
+            )
+            ->addOption(
+                self::OPT_POSTRUN,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney\'s work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity'
+            )
+            ->addOption(
+                self::OPT_ALLOW_MAJOR,
+                null,
+                InputOption::VALUE_NONE,
+                'Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow'
+            )
+            ->setHelp(<<<EOT
+The <info>make</info> command reads git log from the current folder's repository, generates a new release changelog based on it and adds it to the projects changelog
 EOT
            );
     }
@@ -91,11 +100,11 @@ EOT
      */
     private function getChangelogPath(InputInterface $input)
     {
-        $path = $input->getOption('changelog');
+        $path = $input->getOption(self::OPT_CHANGELOG);
         if ($path) {
             return $path;
         }
-        switch ($input->getArgument('type')) {
+        switch ($input->getArgument(self::ARG_TYPE)) {
             case 'debian':
                 $path = getcwd() . DIRECTORY_SEPARATOR . 'debian/changelog';
                 break;
@@ -118,13 +127,14 @@ EOT
     }
 
     /**
-     * @todo To be refactored. Consider this as an integration test.
      * {@inheritdoc}
+     * @todo To be refactored. It's in fact an entry point of the application with all dependencies inverted. So it's not so easy to rework this command.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $outputMessage = new OutputMessage();
+            $postRun = $input->getOption(self::OPT_POSTRUN);
 
             $packageName = $this->getPackageName($input);
             if ($this->isDebian($input) && !$packageName) {
@@ -134,8 +144,9 @@ EOT
                 );
             }
 
-            $command = new GitCommand(new CommandExecutor());
+            $commandExecutor = new CommandExecutor();
 
+            $command = new GitCommand($commandExecutor);
             $lastTag = $command->getLastTag();
             $logOutput = $command->getLogAfterTag($lastTag);
 
@@ -157,7 +168,11 @@ EOT
                 $logSection->addEntry($entry);
             }
 
-            (new VersionIncrementor($logSection))->increment($version);
+            $versionIncrementor = new VersionIncrementor($logSection);
+            if (!$input->getOption(self::OPT_ALLOW_MAJOR)) {
+                $versionIncrementor->denyMajor();
+            }
+            $versionIncrementor->increment($version);
 
             $logList = new ChangelogList();
             $logList->addSection($logSection);
@@ -165,45 +180,49 @@ EOT
 
             $changelogPath = $this->getChangelogPath($input);
             $changelogAddon = (new ChangelogUpdaterFactory())
-                ->create($input->getArgument('type'), new Template\Loader())
+                ->create($input->getArgument(self::ARG_TYPE), new Template\Loader())
                 ->append(
                     new Export\ChangelogFile($changelogPath),
                     new Generator($logList, new Template\Markup())
                 );
+            if (!$postRun) {
+                $outputMessage->appendChangelogInfo($changelogAddon, $changelogPath);
+            }
+            $outputMessage->appendN('Chimney: changelog updated');
 
-            $outputMessage->appendChangelogInfo($changelogAddon, $changelogPath);
+            $placeholderManager = new PlaceholderManager();
 
-            $outputMessage->appendHeader('Release commands:');
-            switch ($input->getArgument('type')) {
-                case 'debian':
-                    $outputMessage->append(<<<"EOT"
-    git checkout next
-    git pull
-    git commit -m "{$packageName} ({$version->export()})" {$changelogPath}
-    git push
-    git checkout master
-    git pull
-    git merge next
-    git push
-    git checkout next
-    <comment>-----------------
-    Copy and paste these command into your console for quicker releasing.</comment>
-
-EOT
-                    );
-                    break;
-                case 'md':
-                    $outputMessage->append(<<<"EOT"
-    git commit -m "Update changelog #ign" {$changelogPath}
-    git tag {$version->export()}
-    git push
-    git push --tags
-    <comment>-----------------
-    Copy and paste these command into your console for quicker releasing.</comment>
-
-EOT
-                    );
-                    break;
+            if ($postRun) {
+                foreach ($placeholderManager->extract($postRun) as $placeholder) {
+                    switch ($placeholder) {
+                        case $placeholderManager::VERSION:
+                            $placeholderManager->collect($placeholderManager::VERSION, $version->export());
+                            break;
+                        case $placeholderManager::PACKAGE_NAME:
+                            $placeholderManager->collect($placeholderManager::PACKAGE_NAME, $packageName);
+                            break;
+                        case $placeholderManager::CHANGELOG_FILE:
+                            $placeholderManager->collect($placeholderManager::CHANGELOG_FILE, $changelogPath);
+                            break;
+                    }
+                }
+                $result = (new ScriptExecutor($postRun))
+                    ->execWithPlaceholders($placeholderManager, $commandExecutor);
+                foreach ($result as $line) {
+                    $outputMessage->appendN($line);
+                }
+            } else {
+                $placeholderManager->collect($placeholderManager::VERSION, $version->export());
+                $placeholderManager->collect($placeholderManager::CHANGELOG_FILE, $changelogPath);
+                switch ($input->getArgument(self::ARG_TYPE)) {
+                    case 'debian':
+                        $placeholderManager->collect($placeholderManager::PACKAGE_NAME, $packageName);
+                        $outputMessage->appendHintDebian($placeholderManager);
+                        break;
+                    case 'md':
+                        $outputMessage->appendHintMd($placeholderManager);
+                        break;
+                }
             }
 
             $output->writeln($outputMessage->get());
@@ -213,14 +232,14 @@ EOT
             return $e->getCode();
         }
     }
-    
+
     /**
      * @param InputInterface $input
      * @return mixed
      */
     private function getPackageName(InputInterface $input)
     {
-        return $input->getOption('package');
+        return $input->getOption(self::OPT_PACKAGE);
     }
 
     /**
@@ -229,7 +248,7 @@ EOT
      */
     private function isDebian(InputInterface $input)
     {
-        return ChangelogUpdaterFactory::TYPE_DEBIAN === $input->getArgument('type');
+        return ChangelogUpdaterFactory::TYPE_DEBIAN === $input->getArgument(self::ARG_TYPE);
     }
 
     /**

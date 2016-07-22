@@ -39,6 +39,15 @@ class OutputMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function appendN() {
+        $this->message->appendN("a");
+        $this->message->appendN("b");
+        $this->assertEquals("a" . PHP_EOL . "b" . PHP_EOL, $this->message->get());
+    }
+
+    /**
+     * @test
+     */
     public function appendHeader() {
         $this->message->append('aaa');
         $this->message->appendHeader('myheader');

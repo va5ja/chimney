@@ -19,9 +19,12 @@ class CommandExecutor implements ExecutorInterface
     /**
      * {@inheritdoc}
      */
-    public function execute($program, $parameters)
+    public function execute($program, $parameters='')
     {
-        exec("{$program} $parameters", $output);
+        exec(
+            $parameters ? "{$program} $parameters" : $program,
+            $output
+        );
         return $output;
     }
 }

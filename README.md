@@ -96,18 +96,20 @@ Usage:
   make [options] [--] <type>
 
 Arguments:
-  type                         Changelog type. Currently supported types: debian, md
+  type                       Changelog type. Currently supported types: debian, md
 
 Options:
-      --package=PACKAGE        Package name. It is mandatory when making a debian changelog
-      --changelog[=CHANGELOG]  Changelog file location. Mandatory when run not ouf the parent folder of the repository
-  -h, --help                   Display this help message
-  -q, --quiet                  Do not output any message
-  -V, --version                Display this application version
-      --ansi                   Force ANSI output
-      --no-ansi                Disable ANSI output
-  -n, --no-interaction         Do not ask any interactive question
-  -v|vv|vvv, --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+      --package=PACKAGE      Package name. It is mandatory when making a debian changelog
+      --changelog=CHANGELOG  Changelog file location. Mandatory when run not ouf the parent folder of the repository
+      --post-run=POST-RUN    A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney's work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity
+      --major                Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow
+  -h, --help                 Display this help message
+  -q, --quiet                Do not output any message
+  -V, --version              Display this application version
+      --ansi                 Force ANSI output
+      --no-ansi              Disable ANSI output
+  -n, --no-interaction       Do not ask any interactive question
+  -v|vv|vvv, --verbose       Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
  The make command reads git log from the current folder's repository, generates a new
@@ -121,6 +123,33 @@ bin/chimney make md
 or, for Debian:
 ```
 bin/chimney make debian --package=plista-dataeng-chimney
+```
+or, with a post-run script:
+```
+bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+```
+
+### Out-of-box release-scripts
+Although you are free to run any custom script using "--post-run" option Plista Chimney contains some out-of-box bash-scripts that are proposed to use when building fully-automated releases:
+
+#### chimney-release-debian.sh
+How to run:
+```
+bin/chimney-release-debian.sh --version=[version] --changelog=[full_path_to_changelog]
+```
+How to run with Chimney using placeholders:
+```
+bin/chimney make debian --package="plista-chimney" --post-run="bin/chimney-release-debian.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+```
+
+#### chimney-release-md.sh
+How to run:
+```
+bin/chimney-release-md.sh --version=[version] --changelog=[full_path_to_changelog]
+```
+How to run with Chimney using placeholders:
+```
+bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
 ```
 
 ## Tagging commits
