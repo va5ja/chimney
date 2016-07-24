@@ -94,7 +94,7 @@ Copy and paste these command into your console for quicker releasing.
 ### chimney make
 ```
 Usage:
-  php bin/chimney make [options] [--] <type>
+  php [path-to-chimney]/chimney make [options] [--] <type>
 
 Arguments:
   type                       Changelog type. Currently supported types: debian, md
@@ -111,43 +111,54 @@ Options:
 Help:
  The make command reads git log from the current folder's repository, generates a new release changelog based on it and adds it to the projects changelog.
 ```
-Run ```php bin/chimney make --help``` for more info about general console runner options.
+
+Run ```php [path-to-chimney]/chimney make --help``` for more info about general console runner options.
 
 For example, to run "make" for CHANGELOG.md:
 ```
-php bin/chimney make md
+php [path-to-chimney]/bin/chimney make md
 ```
 or, for Debian:
 ```
-php bin/chimney make debian --package=plista-dataeng-chimney
+php [path-to-chimney]/bin/chimney make debian --package=plista-dataeng-chimney
 ```
 or, with a post-run script:
 ```
-php bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+php [path-to-chimney]/bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
 ```
-
-### Out-of-box release-scripts
+#### Out-of-box release-scripts
 Although you are free to run any custom script using "--post-run" option Plista Chimney contains some out-of-box bash-scripts that are proposed to use when building fully-automated releases:
 
-#### chimney-release-debian.sh
+##### chimney-release-debian.sh
 How to run:
 ```
-bin/chimney-release-debian.sh --version=[version] --changelog=[full_path_to_changelog]
+[path-to-chimney]/bin/chimney-release-debian.sh --version=[version] --changelog=[full_path_to_changelog]
 ```
 How to run with Chimney using placeholders:
 ```
-bin/chimney make debian --package="plista-chimney" --post-run="bin/chimney-release-debian.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+[path-to-chimney]/bin/chimney make debian --package="plista-chimney" --post-run="bin/chimney-release-debian.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
 ```
 
-#### chimney-release-md.sh
+##### chimney-release-md.sh
 How to run:
 ```
-bin/chimney-release-md.sh --version=[version] --changelog=[full_path_to_changelog]
+[path-to-chimney]/bin/chimney-release-md.sh --version=[version] --changelog=[full_path_to_changelog]
 ```
 How to run with Chimney using placeholders:
 ```
-bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+[path-to-chimney]/bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
 ```
+
+### chimney version
+```
+Usage:
+  php [path-to-chimney]/bin/chimney version
+
+Help:
+ The version command uses Git console tools to detect the latest version tag in a repository.
+```
+
+Run ```php [path-to-chimney]/bin/chimney make --help``` for more info about general console runner options.
 
 ## Tagging commits
 It is important to classify changes you bring into projects. It is recommended to use special tags in your git commit messages if Plista Chimney is a part of releasing process. Among other conveniences tags allow to typify releases according to semantic versioning (major, minor, patch), which is a very important thing in Continuous Delivery.

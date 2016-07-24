@@ -27,6 +27,7 @@ $container
 $application = new Application();
 $application->addCommands([
 	new Command\AboutCommand(),
-	new Command\MakeCommand($container)
+	new Command\MakeCommand($container),
+    new Command\VersionCommand($container)
 ]);
 $application->run();
