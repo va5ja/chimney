@@ -25,7 +25,7 @@ class ChangelogUpdaterFactory
      * @param string $changelogType
      * @param Template\LoaderInterface $templateLoader
      * @return Export\ChangelogUpdaterInterface
-     * @throws Exception
+     * @throws ExitException
      */
     public function create($changelogType, Template\LoaderInterface $templateLoader) {
         switch ($changelogType) {

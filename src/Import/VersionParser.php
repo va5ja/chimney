@@ -73,4 +73,13 @@ class VersionParser
         preg_match("~^[0-9]+{$this->qSeparator}[0-9]+{$this->qSeparator}([0-9]+)?~", $this->versionStr, $matches);
         return isset($matches[1]) ? $matches[1] : Version::DEFAULT_VER;
     }
+
+    /**
+     * Gets the pre-release version postfix section.
+     */
+    public function getPrerelease()
+    {
+        $separatorPos = strpos($this->versionStr, Version::PRERELEASE_SEPARATOR);
+        return (FALSE === $separatorPos) ? '' : substr($this->versionStr, $separatorPos+1);
+    }
 }

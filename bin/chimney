@@ -7,16 +7,26 @@ if (PHP_SAPI !== 'cli') {
 require __DIR__.'/../src/bootstrap.php';
 
 use Plista\Chimney\Console\Application;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Plista\Chimney\Command;
+use Plista\Chimney\System\CommandExecutor;
+use Plista\Chimney\System\GitCommand;
 
 if (function_exists('ini_set')) {
 	@ini_set('display_errors', 1);
 }
 
+$container = new ContainerBuilder();
+$container->register(Command\ContainerAwareCommand::SERVICE_COMMAND_EXE, CommandExecutor::class);
+$container
+    ->register(Command\ContainerAwareCommand::SERVICE_GIT_COMMAND, GitCommand::class)
+    ->addArgument(new Reference(Command\ContainerAwareCommand::SERVICE_COMMAND_EXE));
+
 // run the command application
 $application = new Application();
 $application->addCommands([
 	new Command\AboutCommand(),
-	new Command\MakeCommand()
+	new Command\MakeCommand($container)
 ]);
 $application->run();

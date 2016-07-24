@@ -31,7 +31,7 @@ class AboutTest extends TestCase
      */
     public function execute()
     {
-        $commandTester = $this->executeCommand();
+        $commandTester = $this->executeCommand($this->createCommand());
         $this->assertContains('Plista Chimney', $commandTester->getDisplay());
         // ...
     }

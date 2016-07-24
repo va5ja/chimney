@@ -20,22 +20,17 @@ use Plista\Chimney\Command\MakeCommand;
 class MakeCommandTest extends TestCase
 {
     /**
-     * {@inheritdoc}
-     */
-    protected function createCommand()
-    {
-        return new MakeCommand();
-    }
-
-    /**
      * @test
      */
     public function execute_wrongType()
     {
-        $commandTester = $this->executeCommand([
-            'type' => 'some_wrong_type',
-            //'name' => 'debian'
-        ]);
+        $commandTester = $this->executeCommand(
+            new MakeCommand($this->containerProphet->reveal()),
+            [
+                'type' => 'some_wrong_type',
+                //'name' => 'debian'
+            ]
+        );
         $this->assertEquals(
             ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN,
             $commandTester->getStatusCode()

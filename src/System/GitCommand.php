@@ -82,9 +82,9 @@ class GitCommand implements GitCommandInterface
     /**
      * {@inheritdoc}
      */
-    public function getLogAfterTag($tag)
+    public function getLogAfter($rev)
     {
-        $parameters = "log --format=tformat:'%ad[::]%aN[::]%ae[::]%s' --no-merges {$tag}..HEAD";
+        $parameters = "log --format=tformat:'%ad[::]%aN[::]%ae[::]%s' --no-merges {$rev}..HEAD";
         //$parameters .= " --after '".(new DateTime('-2 weeks'))->format('Y.m.d')."'";
         return implode(PHP_EOL, $this->execute($parameters));
     }

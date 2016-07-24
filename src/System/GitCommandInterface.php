@@ -23,11 +23,12 @@ interface GitCommandInterface
     public function getLastTag();
 
     /**
-     * Gets the log formatted
-     * @param string $tag
+     * Gets formatted log after the revision (not including the revision itself).
+     * Note a tag can also be passed as a revision.
+     * @param string $rev
      * @return string
      */
-    public function getLogAfterTag($tag);
+    public function getLogAfter($rev);
 
     /**
      * Gets user name from the local git config.

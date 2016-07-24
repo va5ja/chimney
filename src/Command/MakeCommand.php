@@ -15,10 +15,9 @@ use Plista\Chimney\Changelog\ChangelogList;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Changelog\Generator;
 use Plista\Chimney\Changelog\Template;
+use Plista\Chimney\Command\Make;
 use Plista\Chimney\Command\Make\AuthorLoader;
-use Plista\Chimney\Command\Make\ChangelogTypeCase;
 use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
-use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\OutputMessage;
 use Plista\Chimney\Command\Make\PlaceholderManager;
 use Plista\Chimney\Command\Make\ScriptExecutor;
@@ -26,13 +25,12 @@ use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\Version;
+use Plista\Chimney\Entity\VersionExportable;
 use Plista\Chimney\Entity\VersionIncrementor;
 use Plista\Chimney\Export;
 use Plista\Chimney\Import\LogConverter;
 use Plista\Chimney\Import\LogParser;
 use Plista\Chimney\Import\VersionParser;
-use Plista\Chimney\System\CommandExecutor;
-use Plista\Chimney\System\GitCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,9 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @todo To be refactored. Currently it's just an integration point, isn't tested at all.
  */
-class MakeCommand extends BaseCommand
+class MakeCommand extends ContainerAwareCommand
 {
-    const NAME = 'make';
     const ARG_TYPE = 'type';
     const OPT_PACKAGE = 'package';
     const OPT_CHANGELOG = 'changelog';
@@ -56,7 +53,7 @@ class MakeCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName(self::NAME)
+            ->setName('make')
             ->setDescription('Make the changelog')
             ->setDefinition([])
             ->addArgument(
@@ -112,15 +109,15 @@ EOT
                 $path = getcwd() . DIRECTORY_SEPARATOR . 'CHANGELOG.md';
                 break;
             default:
-                throw new ExitException(
+                throw new Make\ExitException(
                     "The changelog type is not recognized",
-                    ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN
+                    Make\ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN
                 );
         }
         if (!file_exists($path)) {
-            throw new ExitException(
+            throw new Make\ExitException(
                 "The changelog cannot be found. Run the program out the parent folder of the repository or pass it as parameter",
-                ExitException::STATUS_CHANGELOG_FILE_NOT_FOUND
+                Make\ExitException::STATUS_CHANGELOG_FILE_NOT_FOUND
             );
         }
         return $path;
@@ -138,26 +135,23 @@ EOT
 
             $packageName = $this->getPackageName($input);
             if ($this->isDebian($input) && !$packageName) {
-                throw new Make\Exception(
+                throw new Make\ExitException(
                     "The \"package\" option must set when generating a debian changelog",
-                    Make\Exception::STATUS_ILLEGAL_COMMAND
+                    Make\ExitException::STATUS_ILLEGAL_COMMAND
                 );
             }
+            $changelogPath = $this->getChangelogPath($input);
 
-            $commandExecutor = new CommandExecutor();
+            $lastRev = $this->getLastRev($input);
+            $logOutput = $this->getGitCommand()->getLogAfter($lastRev);
 
-            $command = new GitCommand($commandExecutor);
-            $lastTag = $command->getLastTag();
-            $logOutput = $command->getLogAfterTag($lastTag);
+            $version = $this->getVersion(new VersionParser($lastRev));
 
-            $version = $this->getVersion(new VersionParser($lastTag));
-
-            $author = (new AuthorLoader())->load(new Author(), $command);
-            $release = new Release($version, new DateTime('now'), $author);
+            $release = $this->getRelease($version);
             $release->setPackageName($packageName);
 
             if ('' === trim($logOutput)) {
-                throw new ExitException("No new changes detected", ExitException::STATUS_NO_CHANGES);
+                throw new Make\ExitException("No new changes detected", Make\ExitException::STATUS_NO_CHANGES);
             }
 
             $logSection = new ChangelogSection($release);
@@ -178,7 +172,6 @@ EOT
             $logList->addSection($logSection);
 
 
-            $changelogPath = $this->getChangelogPath($input);
             $changelogAddon = (new ChangelogUpdaterFactory())
                 ->create($input->getArgument(self::ARG_TYPE), new Template\Loader())
                 ->append(
@@ -207,7 +200,7 @@ EOT
                     }
                 }
                 $result = (new ScriptExecutor($postRun))
-                    ->execWithPlaceholders($placeholderManager, $commandExecutor);
+                    ->execWithPlaceholders($placeholderManager, $this->getCommandExecutor());
                 foreach ($result as $line) {
                     $outputMessage->appendN($line);
                 }
@@ -261,6 +254,33 @@ EOT
             $versionParser->getMinor(),
             $versionParser->getPatch()
         );
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return string
+     */
+    protected function getLastRev(InputInterface $input)
+    {
+        return $this->getGitCommand()->getLastTag();
+    }
+
+    /**
+     * @return Author
+     */
+    protected function getAuthor()
+    {
+        return (new AuthorLoader())
+            ->load(new Author(), $this->getGitCommand());
+    }
+
+    /**
+     * @param VersionExportable $version
+     * @return Release
+     */
+    protected function getRelease(VersionExportable $version)
+    {
+        return new Release($version, new DateTime('now'), $this->getAuthor());
     }
 
 }

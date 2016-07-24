@@ -20,7 +20,7 @@ class VersionParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $versionStr
-     * @return Version
+     * @return VersionParser
      */
     private function createParser($versionStr)
     {
@@ -85,5 +85,16 @@ class VersionParserTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(0, $this->createParser('2.5')->getPatch());
         $this->assertEquals(0, $this->createParser('2')->getPatch());
+    }
+
+    /**
+     * @test
+     */
+    public function getPrerelease()
+    {
+        $this->assertEquals('alpha6', $this->createParser('2.5.0-alpha6')->getPrerelease());
+        $this->assertEquals('beta', $this->createParser('0.0.1-beta')->getPrerelease());
+        $this->assertEquals('rc.2', $this->createParser('0.9-rc.2')->getPrerelease());
+        $this->assertEquals('alpha.beta', $this->createParser('1.0.0-alpha.beta')->getPrerelease());
     }
 }

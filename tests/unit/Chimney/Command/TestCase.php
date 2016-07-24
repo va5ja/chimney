@@ -11,75 +11,42 @@
 
 namespace Plista\Chimney\Test\Unit\Command;
 
-use Plista\Chimney\Command\BaseCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  *
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Application
-     */
-    protected $application;
-    /**
-     * @var BaseCommand
-     */
-    protected $command;
-    /**
-     * @var string
-     */
-    protected $commandName;
+    protected $containerProphet;
 
     protected function setUp()
     {
-        $this->application = new Application();
-        $command = $this->createCommand();
-        $this->application->add($command);
-        try {
-            $commandName = $this->extractCommandNameFromClass($command);
-        } catch (\Exception $e) {
-            $this->fail(
-               "The tested " . get_class($command) . " does not conform the naming convention for commands: if the command is \"something\", then the class name must be \"SomethingCommand\"."
-            );
-            return;
-        }
-        $this->command = $this->application->find($commandName);
-    }
-
-    /**
-     * @return BaseCommand
-     */
-    abstract protected function createCommand();
-
-    /**
-     * @param BaseCommand $command
-     * @return string
-     * @throws \Exception
-     */
-    protected function extractCommandNameFromClass(BaseCommand $command)
-    {
-        if (!preg_match('~([A-Za-z0-9\-]+)Command$~', get_class($command), $matches)) {
-            throw new \Exception('Command name cannot be extracted from the Command object');
-        }
-        return strtolower($matches[1]);
+        parent::setUp();
+        $this->containerProphet = $this->prophesize(Container::class);
     }
 
     /**
      * Executes the command on CommandTester and returns the CommandTester object.
+     * @param Command $command
      * @param array $params
      * @return CommandTester
      * @throws \Exception
      */
-    protected function executeCommand(array $params = [])
+    protected function executeCommand(Command $command, array $params = [])
     {
-        $commandTester = new CommandTester($this->command);
+        $application = new Application();
+        $application->add($command);
+        $command = $application->find($command->getName());
+
+        $commandTester = new CommandTester($command);
         if (isset($params['command'])) {
             throw new \Exception("The \$params argument for CommandTestCase::executeCommand() must not contain key command");
         }
-        $params['command'] = $this->command->getName();
+        $params['command'] = $command->getName();
         $commandTester->execute($params);
         return $commandTester;
     }

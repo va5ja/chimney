@@ -54,7 +54,7 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function gegetLogAfterTag()
+    public function gegetLogAfter()
     {
         $tag = '1.0.5';
         $log = [
@@ -64,21 +64,21 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
         $this->executorProphet->execute('git',
            "log --format=tformat:'%ad[::]%aN[::]%ae[::]%s' --no-merges {$tag}..HEAD")
            ->shouldBeCalledTimes(1)->willReturn($log);
-        $result = (new GitCommand($this->executorProphet->reveal()))->getLogAfterTag($tag);
+        $result = (new GitCommand($this->executorProphet->reveal()))->getLogAfter($tag);
         $this->assertEquals(implode(PHP_EOL, $log), $result);
     }
 
     /**
      * @test
      */
-    public function gegetLogAfterTag_emptyResult()
+    public function gegetLogAfter_emptyResult()
     {
         $tag = '1.0.5';
         $log = [];
         $this->executorProphet->execute('git',
            "log --format=tformat:'%ad[::]%aN[::]%ae[::]%s' --no-merges {$tag}..HEAD")
            ->willReturn($log);
-        $result = (new GitCommand($this->executorProphet->reveal()))->getLogAfterTag($tag);
+        $result = (new GitCommand($this->executorProphet->reveal()))->getLogAfter($tag);
         $this->assertEquals('', $result);
     }
 

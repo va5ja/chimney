@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  *
  */
-class AboutCommand extends BaseCommand
+class AboutCommand extends Command
 {
     protected function configure()
     {
