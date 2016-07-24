@@ -19,7 +19,6 @@ use Plista\Chimney\Command\Make;
 use Plista\Chimney\Command\Make\AuthorLoader;
 use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
 use Plista\Chimney\Command\Make\OutputMessage;
-use Plista\Chimney\Command\Make\PlaceholderManager;
 use Plista\Chimney\Command\Make\ScriptExecutor;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
@@ -47,6 +46,11 @@ class MakeCommand extends ContainerAwareCommand
     const OPT_REV = 'rev';
     const OPT_ALLOW_MAJOR = 'major';
     const OPT_POSTRUN = 'post-run';
+
+    const PLACEHOLDER_VERSION = '%VER%';
+    const PLACEHOLDER_PACKAGE_NAME = '%PACKAGE%';
+    const PLACEHOLDER_CHANGELOG_FILE = '%FILE%';
+    const PLACEHOLDER_CHANGELOG_ADDON = '%ADDON%';
 
 	/**
      * {@inheritdoc}
@@ -138,24 +142,22 @@ EOT
     {
         try {
             $outputMessage = new OutputMessage();
-            $postRun = $input->getOption(self::OPT_POSTRUN);
 
-            $packageName = $this->getPackageName($input);
-            if ($this->isDebian($input) && !$packageName) {
+            $this->setPlaceholder(self::PLACEHOLDER_PACKAGE_NAME, $this->getPackageName($input));
+            if ($this->isDebian($input) && !$this->getPlaceholder(self::PLACEHOLDER_PACKAGE_NAME)) {
                 throw new Make\ExitException(
                     "The \"package\" option must set when generating a debian changelog",
                     Make\ExitException::STATUS_ILLEGAL_COMMAND
                 );
             }
-            $changelogPath = $this->getChangelogPath($input);
+            $this->setPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE, $this->getChangelogPath($input));
 
             $lastRev = $this->getLastRev($input);
             $logOutput = $this->getGitCommand()->getLogAfter($lastRev);
 
             $version = $this->getVersion(new VersionParser($lastRev));
-
             $release = $this->getRelease($version);
-            $release->setPackageName($packageName);
+            $release->setPackageName($this->getPlaceholder(self::PLACEHOLDER_PACKAGE_NAME));
 
             if ('' === trim($logOutput)) {
                 throw new Make\ExitException("No new changes detected", Make\ExitException::STATUS_NO_CHANGES);
@@ -174,54 +176,36 @@ EOT
                 $versionIncrementor->denyMajor();
             }
             $versionIncrementor->increment($version);
+            $this->setPlaceholder(self::PLACEHOLDER_VERSION, $version->export());
 
             $logList = new ChangelogList();
             $logList->addSection($logSection);
 
+            $this->setPlaceholder(
+                self::PLACEHOLDER_CHANGELOG_ADDON,
+                (new ChangelogUpdaterFactory())
+                    ->create($input->getArgument(self::ARG_TYPE), new Template\Loader())
+                    ->append(
+                        new Export\ChangelogFile($this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE)),
+                        new Generator($logList, new Template\Markup())
+                    )
+            );
 
-            $changelogAddon = (new ChangelogUpdaterFactory())
-                ->create($input->getArgument(self::ARG_TYPE), new Template\Loader())
-                ->append(
-                    new Export\ChangelogFile($changelogPath),
-                    new Generator($logList, new Template\Markup())
-                );
-            if (!$postRun) {
-                $outputMessage->appendChangelogInfo($changelogAddon, $changelogPath);
-            }
             $outputMessage->appendN('Chimney: changelog updated');
+            $outputMessage->appendChangelogInfo(
+                $this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_ADDON),
+                $this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE)
+            );
 
-            $placeholderManager = new PlaceholderManager();
-
+            $postRun = $input->getOption(self::OPT_POSTRUN);
             if ($postRun) {
-                foreach ($placeholderManager->extract($postRun) as $placeholder) {
-                    switch ($placeholder) {
-                        case $placeholderManager::VERSION:
-                            $placeholderManager->collect($placeholderManager::VERSION, $version->export());
-                            break;
-                        case $placeholderManager::PACKAGE_NAME:
-                            $placeholderManager->collect($placeholderManager::PACKAGE_NAME, $packageName);
-                            break;
-                        case $placeholderManager::CHANGELOG_FILE:
-                            $placeholderManager->collect($placeholderManager::CHANGELOG_FILE, $changelogPath);
-                            break;
-                    }
-                }
-                $result = (new ScriptExecutor($postRun))
-                    ->execWithPlaceholders($placeholderManager, $this->getCommandExecutor());
+                $result = (new ScriptExecutor($postRun))->execWithPlaceholders(
+                    $this->getPlaceholderManagerService(),
+                    $this->placeholders,
+                    $this->getCommandExecutor()
+                );
                 foreach ($result as $line) {
                     $outputMessage->appendN($line);
-                }
-            } else {
-                $placeholderManager->collect($placeholderManager::VERSION, $version->export());
-                $placeholderManager->collect($placeholderManager::CHANGELOG_FILE, $changelogPath);
-                switch ($input->getArgument(self::ARG_TYPE)) {
-                    case 'debian':
-                        $placeholderManager->collect($placeholderManager::PACKAGE_NAME, $packageName);
-                        $outputMessage->appendHintDebian($placeholderManager);
-                        break;
-                    case 'md':
-                        $outputMessage->appendHintMd($placeholderManager);
-                        break;
                 }
             }
 

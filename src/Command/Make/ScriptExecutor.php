@@ -11,6 +11,9 @@
 
 namespace Plista\Chimney\Command\Make;
 
+use Plista\Chimney\Console\PlaceholderManager;
+use Plista\Chimney\Console\PlaceholderManagerInterface;
+use Plista\Chimney\Console\PlaceholderManagerServiceInterface;
 use Plista\Chimney\System\ExecutorInterface;
 
 /**
@@ -55,14 +58,15 @@ class ScriptExecutor
 
     /**
      * Executes a script parameterized with placeholders.
-     * @param PlaceholderManager $placeholderManager
+     * @param PlaceholderManagerServiceInterface $placeholderService
+     * @param array $placeholders
      * @param ExecutorInterface $executor
      * @return array Output of the executed system command, as an array of lines.
      */
-    public function execWithPlaceholders(PlaceholderManager $placeholderManager, ExecutorInterface $executor) {
+    public function execWithPlaceholders(PlaceholderManagerServiceInterface $placeholderService, array $placeholders, ExecutorInterface $executor) {
         return $executor->execute(
             $this->script,
-            $this->parameters ? $placeholderManager->inject($this->parameters) : ''
+            $this->parameters ? $placeholderService->replace(new PlaceholderManager(), $this->parameters, $placeholders) : ''
         );
 
     }

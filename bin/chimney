@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Plista\Chimney\Command;
 use Plista\Chimney\System\CommandExecutor;
 use Plista\Chimney\System\GitCommand;
+use Plista\Chimney\Console\PlaceholderManagerService;
 
 if (function_exists('ini_set')) {
 	@ini_set('display_errors', 1);
@@ -19,9 +20,9 @@ if (function_exists('ini_set')) {
 
 $container = new ContainerBuilder();
 $container->register(Command\ContainerAwareCommand::SERVICE_COMMAND_EXE, CommandExecutor::class);
-$container
-    ->register(Command\ContainerAwareCommand::SERVICE_GIT_COMMAND, GitCommand::class)
+$container->register(Command\ContainerAwareCommand::SERVICE_GIT_COMMAND, GitCommand::class)
     ->addArgument(new Reference(Command\ContainerAwareCommand::SERVICE_COMMAND_EXE));
+$container->register(Command\ContainerAwareCommand::SERVICE_PLACEHOLDER_MANAGER, PlaceholderManagerService::class);
 
 // run the command application
 $application = new Application();

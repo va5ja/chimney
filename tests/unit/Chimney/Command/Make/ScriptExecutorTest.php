@@ -3,10 +3,12 @@
 
 namespace Plista\Chimney\Test\Unit\Command\Make;
 
-use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\ScriptExecutor;
-use Plista\Chimney\Command\Make\PlaceholderManager as P;
+use Plista\Chimney\Command\Make\ExitException;
+use Plista\Chimney\Console\PlaceholderManagerInterface;
+use Plista\Chimney\Console\PlaceholderManagerServiceInterface;
 use Plista\Chimney\System\ExecutorInterface;
+use Prophecy\Argument;
 
 /**
  *
@@ -34,28 +36,32 @@ class ScriptExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function execWithPlaceholders()
     {
-        $placeholderManager = new P();
         $script = 'chimney-release-debian.sh';
-        $version = '1.1.0';
-        $changelogFile = './debian/changelog';
-
-        $placeholderManager->collect(P::CHANGELOG_FILE, $changelogFile)
-            ->collect(P::VERSION, $version);
+        $parameters = '--version=%VERSION% --changelog=%CHANGELOG%';
+        $parametersReady = "--version=1.1.0 --changelog=./debian/changelog";
+        $placeholders = ['%VERSION%' => '1.1.0', '%CHANGELOG%' => './debian/changelog'];
 
         $commandExecutor = $this->prophesize(ExecutorInterface::class);
-        $commandExecutor->execute(
-                $script,
-                "--version={$version} --changelog={$changelogFile}"
-            )
-            ->willReturn('OK');
+        $commandExecutor->execute($script, $parametersReady)->willReturn('OK');
 
-        $scriptExecutor = new ScriptExecutor(
-            "{$script} --version=" . P::VERSION . " --changelog=" . P::CHANGELOG_FILE
-        );
+        
+        $scriptExecutor = new ScriptExecutor("{$script} {$parameters}");
+
+        $serviceProphet = $this->prophesize(PlaceholderManagerServiceInterface::class);
+        $serviceProphet->replace(
+                Argument::type(PlaceholderManagerInterface::class),
+                $parameters,
+                $placeholders
+            )
+            ->willReturn($parametersReady);
 
         $this->assertEquals(
             'OK',
-            $scriptExecutor->execWithPlaceholders($placeholderManager, $commandExecutor->reveal())
+            $scriptExecutor->execWithPlaceholders(
+                $serviceProphet->reveal(),
+                $placeholders,
+                $commandExecutor->reveal()
+            )
         );
     }
 
@@ -65,23 +71,22 @@ class ScriptExecutorTest extends \PHPUnit_Framework_TestCase
     public function execWithPlaceholders_emptyParameters()
     {
         $script = 'chimney-release-debian.sh';
-        $version = '1.1.0';
-
-        $placeholderManager = (new P())
-            ->collect(P::VERSION, $version);
 
         $commandExecutor = $this->prophesize(ExecutorInterface::class);
-        $commandExecutor->execute(
-                $script,
-                ""
-            )
-            ->willReturn('OK');
+        $commandExecutor->execute($script, "")->willReturn('OK');
+
+        $serviceProphet = $this->prophesize(PlaceholderManagerServiceInterface::class);
+        $serviceProphet->replace()->shouldNotBeCalled();
 
         $scriptExecutor = new ScriptExecutor($script);
 
         $this->assertEquals(
             'OK',
-            $scriptExecutor->execWithPlaceholders($placeholderManager, $commandExecutor->reveal())
+            $scriptExecutor->execWithPlaceholders(
+                $serviceProphet->reveal(),
+                ['%SOMETAG%'=>'someval'],
+                $commandExecutor->reveal()
+            )
         );
     }
 }

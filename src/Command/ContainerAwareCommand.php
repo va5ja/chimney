@@ -11,19 +11,27 @@
 
 namespace Plista\Chimney\Command;
 
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Plista\Chimney\System\CommandExecutor;
 use Plista\Chimney\System\GitCommand;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Plista\Chimney\Console\PlaceholderManagerServiceInterface;
 
 abstract class ContainerAwareCommand extends BaseCommand
 {
     const SERVICE_GIT_COMMAND = 'git';
     const SERVICE_COMMAND_EXE = 'command_executor';
+    const SERVICE_PLACEHOLDER_MANAGER = 'placeholder_manager';
 
     /**
      * @var ContainerInterface
      */
     protected $serviceContainer;
+
+    /**
+     * @var array
+     */
+    protected $placeholders = [];
 
     /**
      * ContainerAwareCommand constructor.
@@ -36,11 +44,33 @@ abstract class ContainerAwareCommand extends BaseCommand
     }
 
     /**
+     * Sets the placeholder.
+     * @param string $tag
+     * @param mixed $val
+     */
+    protected function setPlaceholder($tag, $val)
+    {
+        $this->placeholders[$tag] = $val;
+    }
+
+    /**
+     * @param string $tag
+     * @return mixed
+     */
+    protected function getPlaceholder($tag)
+    {
+        if (!isset($this->placeholders[$tag])) {
+            throw new InvalidArgumentException("Unknown placeholder {$tag}");
+        }
+        return $this->placeholders[$tag];
+    }
+
+    /**
      * @return CommandExecutor
      */
     protected function getCommandExecutor()
     {
-        return $this->serviceContainer->get('command_executor');
+        return $this->serviceContainer->get(self::SERVICE_COMMAND_EXE);
     }
 
     /**
@@ -48,6 +78,14 @@ abstract class ContainerAwareCommand extends BaseCommand
      */
     protected function getGitCommand()
     {
-        return $this->serviceContainer->get('git');
+        return $this->serviceContainer->get(self::SERVICE_GIT_COMMAND);
+    }
+
+    /**
+     * @return PlaceholderManagerServiceInterface
+     */
+    protected function getPlaceholderManagerService()
+    {
+        return $this->serviceContainer->get(self::SERVICE_PLACEHOLDER_MANAGER);
     }
 }

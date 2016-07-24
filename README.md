@@ -10,12 +10,13 @@ Currently supported changelog formats:
 
 ## Requirements
 
-1. Chimney is currently tested only in Linux.
+1. PHP (v5.5 or higher) console interpreter has to be installed in the system.
 2. Git has to be installed and available via console as "git" command.
 3. The additional UpDep script maintains only projects that have Composer installed and configured.
 4. In the current implementation UpDep requires the "[composer-changelogs](https://github.com/pyrech/composer-changelogs)" plugin to be installed in your Composer.
 5. To make good use of Chimney you need to follow [Git message convention](http://chris.beams.io/posts/git-commit/).
 6. To make Chimney able to increment automatically minor and major versions you need to follow the [tagging convention](#tagging-commits).
+7. Chimney is currently tested only in Linux, although it's expected to work in other OS with PHP intepreter installed.
 
 ## Installation
 
@@ -79,17 +80,6 @@ Generated changelog:
 --------------------
 The changelog was added to /usr/share/chimney/CHANGELOG.md. You don't need to edit it manually.
 
-=================
-Release commands:
-=================
-git commit -m "Update changelog #ign" /usr/share/chimney/CHANGELOG.md
-git tag 1.0.1
-git push
-git push --tags
------------------
-Copy and paste these command into your console for quicker releasing.
-```
-
 ## Usage
 ### chimney make
 ```
@@ -102,7 +92,7 @@ Arguments:
 Options:
       --package=PACKAGE      Package name. It is mandatory when making a debian changelog
       --changelog=CHANGELOG  Changelog file location. Mandatory when run not ouf the parent folder of the repository
-      --post-run=POST-RUN    A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney's work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity
+      --post-run=POST-RUN    A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney's work to a post-run script. The next placeholders are supported: %VER%, %PACKAGE%, %FILE%, %ADDON%. The option decreases the verbosity
       --rev[=REV]            Sets the revision in Git repository, after which log entries must be collected. If not set, the program will try to detect the latest version-tagged revision
       --major                Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow
   -h, --help                 Display this help message
@@ -124,29 +114,57 @@ php [path-to-chimney]/bin/chimney make debian --package=plista-dataeng-chimney
 ```
 or, with a post-run script:
 ```
-php [path-to-chimney]/bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+php [path-to-chimney]/bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VER% --changelog=%FILE%"
 ```
 #### Out-of-box release-scripts
-Although you are free to run any custom script using "--post-run" option Plista Chimney contains some out-of-box bash-scripts that are proposed to use when building fully-automated releases:
+Although you are free to run any custom script using "--post-run" option Plista Chimney contains some out-of-box Bash scripts that are proposed to use when building semi- or fully-automated releases.
 
 ##### chimney-release-debian.sh
+Executes all Git commands required for debian release: pull, commit, push.
+
 How to run:
 ```
 [path-to-chimney]/bin/chimney-release-debian.sh --version=[version] --changelog=[full_path_to_changelog]
 ```
 How to run with Chimney using placeholders:
 ```
-[path-to-chimney]/bin/chimney make debian --package="plista-chimney" --post-run="bin/chimney-release-debian.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+[path-to-chimney]/bin/chimney make debian --package="plista-chimney" --post-run="[path-to-chimney]/bin/chimney-release-debian.sh --version=%VER% --changelog=%FILE%"
 ```
 
 ##### chimney-release-md.sh
+Executes all Git commands required for classical release: pull, commit, push.
+
 How to run:
 ```
 [path-to-chimney]/bin/chimney-release-md.sh --version=[version] --changelog=[full_path_to_changelog]
 ```
 How to run with Chimney using placeholders:
 ```
-[path-to-chimney]/bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+[path-to-chimney]/bin/chimney make md --post-run="[path-to-chimney]/bin/chimney-release-md.sh --version=%VER% --changelog=%FILE%"
+```
+
+##### chimney-make-debian.sh
+Shows a console script with Git commands required for debian release, but does not execute them. Proposed to be used in semi-automated process.
+
+How to run:
+```
+[path-to-chimney]/bin/chimney-make-debian.sh --version=[version] --changelog=[full_path_to_changelog] --package=[package_name]
+```
+How to run with Chimney using placeholders:
+```
+[path-to-chimney]/bin/chimney make md --post-run="[path-to-chimney]/bin/chimney-make-debian.sh --version=%VER% --changelog=%FILE%" --package=%PACKAGE%
+```
+
+##### chimney-make-md.sh
+Shows a console script with Git commands required for classical release, but does not execute them. Proposed to be used in semi-automated process.
+
+How to run:
+```
+[path-to-chimney]/bin/chimney-make-md.sh --version=[version] --changelog=[full_path_to_changelog]
+```
+How to run with Chimney using placeholders:
+```
+[path-to-chimney]/bin/chimney make md --post-run="[path-to-chimney]/bin/chimney-make-md.sh --version=%VER% --changelog=%FILE%"
 ```
 
 ### chimney version
