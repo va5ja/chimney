@@ -44,6 +44,7 @@ class MakeCommand extends ContainerAwareCommand
     const ARG_TYPE = 'type';
     const OPT_PACKAGE = 'package';
     const OPT_CHANGELOG = 'changelog';
+    const OPT_REV = 'rev';
     const OPT_ALLOW_MAJOR = 'major';
     const OPT_POSTRUN = 'post-run';
 
@@ -78,6 +79,12 @@ class MakeCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney\'s work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity'
+            )
+            ->addOption(
+                self::OPT_REV,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Sets the revision in Git repository, after which log entries must be collected. If not set, the program will try to detect the latest version-tagged revision'
             )
             ->addOption(
                 self::OPT_ALLOW_MAJOR,
@@ -262,7 +269,7 @@ EOT
      */
     protected function getLastRev(InputInterface $input)
     {
-        return $this->getGitCommand()->getLastTag();
+        return $input->getOption(self::OPT_REV) ?: $this->getGitCommand()->getLastTag();
     }
 
     /**

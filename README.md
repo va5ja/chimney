@@ -91,9 +91,10 @@ Copy and paste these command into your console for quicker releasing.
 ```
 
 ## Usage
+### chimney make
 ```
 Usage:
-  make [options] [--] <type>
+  php bin/chimney make [options] [--] <type>
 
 Arguments:
   type                       Changelog type. Currently supported types: debian, md
@@ -102,31 +103,27 @@ Options:
       --package=PACKAGE      Package name. It is mandatory when making a debian changelog
       --changelog=CHANGELOG  Changelog file location. Mandatory when run not ouf the parent folder of the repository
       --post-run=POST-RUN    A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney's work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity
+      --rev[=REV]            Sets the revision in Git repository, after which log entries must be collected. If not set, the program will try to detect the latest version-tagged revision
       --major                Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow
   -h, --help                 Display this help message
   -q, --quiet                Do not output any message
-  -V, --version              Display this application version
-      --ansi                 Force ANSI output
-      --no-ansi              Disable ANSI output
-  -n, --no-interaction       Do not ask any interactive question
-  -v|vv|vvv, --verbose       Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Help:
- The make command reads git log from the current folder's repository, generates a new
- release changelog based on it and adds it to the projects changelog. 
+ The make command reads git log from the current folder's repository, generates a new release changelog based on it and adds it to the projects changelog.
 ```
+Run ```php bin/chimney make --help``` for more info about general console runner options.
 
-For example, for CHANGELOG.md:
+For example, to run "make" for CHANGELOG.md:
 ```
-bin/chimney make md
+php bin/chimney make md
 ```
 or, for Debian:
 ```
-bin/chimney make debian --package=plista-dataeng-chimney
+php bin/chimney make debian --package=plista-dataeng-chimney
 ```
 or, with a post-run script:
 ```
-bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
+php bin/chimney make md --post-run="bin/chimney-release-md.sh --version=%VERSION% --changelog=%CHANGELOGFILE%"
 ```
 
 ### Out-of-box release-scripts
