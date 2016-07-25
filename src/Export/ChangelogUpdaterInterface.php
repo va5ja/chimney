@@ -19,6 +19,12 @@ use Plista\Chimney\Changelog\GeneratorInterface;
 interface ChangelogUpdaterInterface
 {
     /**
+     * @param GeneratorInterface $generator
+     * @return string
+     */
+    public function getAddon(GeneratorInterface $generator);
+
+    /**
      * @param ChangelogFileInterface $file
      * @param GeneratorInterface $generator
      * @return string Generated changelog addon.

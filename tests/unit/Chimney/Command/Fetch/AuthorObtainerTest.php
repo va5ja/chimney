@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Plista\Chimney\Test\Unit\Command\Make;
+namespace Plista\Chimney\Test\Unit\Command\Fetch;
 
-use Plista\Chimney\Command\Make\AuthorLoader;
+use Plista\Chimney\Command\Fetch\AuthorLoader;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\System\GitCommandInterface;
 

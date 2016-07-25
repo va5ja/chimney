@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Plista\Chimney\Test\Unit\Command\Make;
+namespace Plista\Chimney\Test\Unit\Command\Fetch;
 
 use Plista\Chimney\Changelog\Template;
-use Plista\Chimney\Command\Make\ExitException;
-use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
+use Plista\Chimney\Command\Fetch\ExitException;
+use Plista\Chimney\Command\Fetch\ChangelogUpdaterFactory;
 use Plista\Chimney\Export;
 
 /**

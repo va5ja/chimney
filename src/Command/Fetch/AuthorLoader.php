@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Plista\Chimney\Command\Make;
+namespace Plista\Chimney\Command\Fetch;
 
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\System\GitCommandInterface;

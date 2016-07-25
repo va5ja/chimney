@@ -178,6 +178,25 @@ Help:
 
 Run ```php [path-to-chimney]/bin/chimney make --help``` for more info about general console runner options.
 
+### chimney fetch
+```
+Usage:
+  php [path-to-chimney]/bin/chimney fetch
+
+Arguments:
+  type                   Changelog type. Currently supported types: debian, md
+
+Options:
+      --package=PACKAGE  Package name. It is mandatory when making a debian changelog
+      --rev[=REV]        Sets the revision in Git repository, after which log entries must be collected. If not set, the program will try to detect the latest version-tagged revision
+      --major            Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow
+
+Help:
+ The fetch command generates an addon for the changelog of a given type.
+```
+
+Run ```php [path-to-chimney]/bin/chimney fetch --help``` for more info about general console runner options.
+
 ## Tagging commits
 It is important to classify changes you bring into projects. It is recommended to use special tags in your git commit messages if Plista Chimney is a part of releasing process. Among other conveniences tags allow to typify releases according to semantic versioning (major, minor, patch), which is a very important thing in Continuous Delivery.
 

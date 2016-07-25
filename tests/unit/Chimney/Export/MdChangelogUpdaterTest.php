@@ -9,39 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Plista\Chimney\Test\Unit\Changelog;
+namespace Plista\Chimney\Test\Unit\Export;
 
-use Plista\Chimney\Changelog\GeneratorInterface;
-use Plista\Chimney\Changelog\Template;
-use Plista\Chimney\Export\ChangelogFileInterface;
 use Plista\Chimney\Export\MdChangelogUpdater;
+use Plista\Chimney\Changelog\Template;
 
 /**
  *
  */
-class MdChangelogUpdaterTest extends \PHPUnit_Framework_TestCase
+class MdChangelogUpdaterTest extends ChangelogUpdaterTestCase
 {
     /**
-     * @test
+     * {@inheritdoc}
      */
-    public function append()
+    protected function createUpdater()
     {
-        $template = uniqid('some template - ');
-        $changelog = uniqid('changelog addon: ');
-
         $tplLoaderProphet = $this->prophesize(Template\Loader::class);
-        $tplLoaderProphet->loadMd()->willReturn($template);
+        $tplLoaderProphet->loadMd()->willReturn($this->template);
 
-        $file = $this->prophesize(ChangelogFileInterface::class);
-        $file->add($changelog)->shouldBeCalled();
-
-        $generator = $this->prophesize(GeneratorInterface::class);
-        $generator->makeChangelog($template)->willReturn($changelog);
-
-        $updater = new MdChangelogUpdater($tplLoaderProphet->reveal());
-        $this->assertEquals(
-           $changelog,
-           $updater->append($file->reveal(), $generator->reveal())
-        );
+        return new MdChangelogUpdater($tplLoaderProphet->reveal());
     }
 }

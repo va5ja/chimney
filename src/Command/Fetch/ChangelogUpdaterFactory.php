@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plista\Chimney\Command\Make;
+namespace Plista\Chimney\Command\Fetch;
 
 use Plista\Chimney\Export;
 use Plista\Chimney\Changelog\Template;
@@ -47,7 +47,6 @@ class ChangelogUpdaterFactory
                     ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN
                 );
         }
-
     }
 
     /**

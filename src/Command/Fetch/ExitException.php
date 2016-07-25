@@ -18,4 +18,7 @@ use Plista\Chimney\Command;
  */
 class ExitException extends Command\ExitException
 {
+    const STATUS_CHANGELOG_TYPE_UNKNOWN = 2;
+    const STATUS_CHANGELOG_FILE_NOT_FOUND = 4;
+    const STATUS_SCRIPT_CANNOT_RUN = 5;
 }

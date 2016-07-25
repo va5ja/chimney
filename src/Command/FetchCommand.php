@@ -18,8 +18,6 @@ use Plista\Chimney\Changelog\Template;
 use Plista\Chimney\Command\Make;
 use Plista\Chimney\Command\Fetch\AuthorLoader;
 use Plista\Chimney\Command\Fetch\ChangelogUpdaterFactory;
-use Plista\Chimney\Command\Make\OutputMessage;
-use Plista\Chimney\Command\Make\ScriptExecutor;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Entity\Release;
@@ -36,21 +34,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @todo refactor
+ * @todo To be refactored.
  */
-class MakeCommand extends ContainerAwareCommand
+class FetchCommand extends ContainerAwareCommand
 {
     const ARG_TYPE = 'type';
     const OPT_PACKAGE = 'package';
-    const OPT_CHANGELOG = 'changelog';
     const OPT_REV = 'rev';
     const OPT_ALLOW_MAJOR = 'major';
-    const OPT_POSTRUN = 'post-run';
-
-    const PLACEHOLDER_VERSION = '%VER%';
-    const PLACEHOLDER_PACKAGE_NAME = '%PACKAGE%';
-    const PLACEHOLDER_CHANGELOG_FILE = '%FILE%';
-    const PLACEHOLDER_CHANGELOG_ADDON = '%ADDON%';
 
 	/**
      * {@inheritdoc}
@@ -58,7 +49,7 @@ class MakeCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('make')
+            ->setName('fetch')
             ->setDescription('Make the changelog')
             ->setDefinition([])
             ->addArgument(
@@ -73,18 +64,6 @@ class MakeCommand extends ContainerAwareCommand
                 'Package name. It is mandatory when making a debian changelog'
             )
             ->addOption(
-                self::OPT_CHANGELOG,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Changelog file location. Mandatory when run not ouf the parent folder of the repository'
-            )
-            ->addOption(
-                self::OPT_POSTRUN,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'A full-path to a script with parameters to be run right after Chimney finishes its work. This is the way Chimney can be used as a part of Continuous Delivery automation. The main feature of this option is the placeholders. Using the placeholders you can pass results of Chimney\'s work to a post-run script. The next placeholders are supported: %VERSION%, %PACKAGE%, %CHANGELOGFILE%. The option decreases the verbosity'
-            )
-            ->addOption(
                 self::OPT_REV,
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -97,41 +76,9 @@ class MakeCommand extends ContainerAwareCommand
                 'Allows major releases. Be default there only can be minor or patches ones. Activate this option only if you have a well-functioning GIT workflow'
             )
             ->setHelp(<<<EOT
-The <info>make</info> command reads git log from the current folder's repository, generates a new release changelog based on it and adds it to the projects changelog
+The <info>fetch</info> command generates an addon for the changelog of a given type
 EOT
            );
-    }
-
-    /**
-     * @param InputInterface $input
-     * @return mixed|string
-     */
-    private function getChangelogPath(InputInterface $input)
-    {
-        $path = $input->getOption(self::OPT_CHANGELOG);
-        if ($path) {
-            return $path;
-        }
-        switch ($input->getArgument(self::ARG_TYPE)) {
-            case 'debian':
-                $path = getcwd() . DIRECTORY_SEPARATOR . 'debian/changelog';
-                break;
-            case 'md':
-                $path = getcwd() . DIRECTORY_SEPARATOR . 'CHANGELOG.md';
-                break;
-            default:
-                throw new Make\ExitException(
-                    "The changelog type is not recognized",
-                    Make\ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN
-                );
-        }
-        if (!file_exists($path)) {
-            throw new Make\ExitException(
-                "The changelog cannot be found. Run the program out the parent folder of the repository or pass it as parameter",
-                Make\ExitException::STATUS_CHANGELOG_FILE_NOT_FOUND
-            );
-        }
-        return $path;
     }
 
     /**
@@ -141,23 +88,20 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $outputMessage = new OutputMessage();
-
-            $this->setPlaceholder(self::PLACEHOLDER_PACKAGE_NAME, $this->getPackageName($input));
-            if ($this->isDebian($input) && !$this->getPlaceholder(self::PLACEHOLDER_PACKAGE_NAME)) {
+            $packageName = $this->getPackageName($input);
+            if ($this->isDebian($input) && !$packageName) {
                 throw new Make\ExitException(
                     "The \"package\" option must set when generating a debian changelog",
                     Make\ExitException::STATUS_ILLEGAL_COMMAND
                 );
             }
-            $this->setPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE, $this->getChangelogPath($input));
 
             $lastRev = $this->getLastRev($input);
             $logOutput = $this->getGitCommand()->getLogAfter($lastRev);
 
             $version = $this->getVersion(new VersionParser($lastRev));
             $release = $this->getRelease($version);
-            $release->setPackageName($this->getPlaceholder(self::PLACEHOLDER_PACKAGE_NAME));
+            $release->setPackageName($packageName);
 
             if ('' === trim($logOutput)) {
                 throw new Make\ExitException("No new changes detected", Make\ExitException::STATUS_NO_CHANGES);
@@ -176,40 +120,15 @@ EOT
                 $versionIncrementor->denyMajor();
             }
             $versionIncrementor->increment($version);
-            $this->setPlaceholder(self::PLACEHOLDER_VERSION, $version->export());
 
             $logList = new ChangelogList();
             $logList->addSection($logSection);
 
-            $this->setPlaceholder(
-                self::PLACEHOLDER_CHANGELOG_ADDON,
+            $output->writeln(
                 (new ChangelogUpdaterFactory())
                     ->create($input->getArgument(self::ARG_TYPE), new Template\Loader())
-                    ->append(
-                        new Export\ChangelogFile($this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE)),
-                        new Generator($logList, new Template\Markup())
-                    )
+                    ->getAddon(new Generator($logList, new Template\Markup()))
             );
-
-            $outputMessage->appendN('Chimney: changelog updated');
-            $outputMessage->appendChangelogInfo(
-                $this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_ADDON),
-                $this->getPlaceholder(self::PLACEHOLDER_CHANGELOG_FILE)
-            );
-
-            $postRun = $input->getOption(self::OPT_POSTRUN);
-            if ($postRun) {
-                $result = (new ScriptExecutor($postRun))->execWithPlaceholders(
-                    $this->getPlaceholderManagerService(),
-                    $this->placeholders,
-                    $this->getCommandExecutor()
-                );
-                foreach ($result as $line) {
-                    $outputMessage->appendN($line);
-                }
-            }
-
-            $output->writeln($outputMessage->get());
         }
         catch (Make\ExitException $e) {
             $this->setError($output, $e->getMessage());

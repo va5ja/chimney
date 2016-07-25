@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plista\Chimney\Test\Unit\Changelog;
+namespace Plista\Chimney\Test\Unit\Export;
 
 use Plista\Chimney\Changelog\Template;
 use Plista\Chimney\Export\ChangelogFile;

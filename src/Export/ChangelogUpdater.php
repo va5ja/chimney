@@ -41,9 +41,16 @@ abstract class ChangelogUpdater implements ChangelogUpdaterInterface
     /**
      * {@inheritdoc}
      */
+    public function getAddon(GeneratorInterface $generator) {
+        return $generator->makeChangelog($this->getTemplate());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function append(ChangelogFileInterface $file, GeneratorInterface $generator)
     {
-        $changelogAddon = $generator->makeChangelog($this->getTemplate());
+        $changelogAddon = $this->getAddon($generator);
         $file->add($changelogAddon);
         return $changelogAddon;
     }
