@@ -79,8 +79,10 @@ Generated changelog:
 
 --------------------
 The changelog was added to /usr/share/chimney/CHANGELOG.md. You don't need to edit it manually.
+```
 
 ## Usage
+
 ### chimney make
 ```
 Usage:
