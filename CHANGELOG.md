@@ -1,3 +1,7 @@
+### 1.1.0-beta2 - 2016-08-02
+
+  * Fix broken git hints.
+
 ### 1.1.0-beta1 - 2016-07-22
 
   * Added option to allow major releases. By default only minor and patch ones are possible.
