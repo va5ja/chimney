@@ -83,15 +83,15 @@ beginning
 <info>====================
 Release commands:
 ====================</info>
-    git checkout next
-    git pull
-    git commit -m "{$package} ($version) $changelog"
-    git push
-    git checkout master
-    git pull
-    git merge next
-    git push
-    git checkout next
+git checkout next
+git pull
+git commit -m "{$package} ($version)" -- $changelog
+git push
+git checkout master
+git pull
+git merge next
+git push
+git checkout next
 <comment>--------------------
 Copy and paste these command into your console for quicker releasing.
 ====================</comment>
@@ -120,10 +120,10 @@ beginning
 <info>====================
 Release commands:
 ====================</info>
-    git commit -m "Update changelog #ign" {$changelog}
-    git tag {$version}
-    git push
-    git push --tags
+git commit -m "Update changelog #ign" {$changelog}
+git tag {$version}
+git push
+git push --tags
 <comment>--------------------
 Copy and paste these command into your console for quicker releasing.
 ====================</comment>

@@ -37,12 +37,8 @@ class MakeCommandTest extends TestCase
             //'name' => 'debian'
         ]);
         $this->assertEquals(
-            ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN,
+            ExitException::STATUS_NO_CHANGES,
             $commandTester->getStatusCode()
-        );
-        $this->assertEquals(
-            'Errors occured:' . PHP_EOL . 'The changelog type is not recognized',
-            trim($commandTester->getDisplay())
         );
     }
 }
