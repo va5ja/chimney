@@ -1,3 +1,7 @@
+### 1.1.0-beta2 - 2016-08-17
+
+  * Release v1.1.0 as stable.
+
 ### 1.1.0-beta2 - 2016-08-02
 
   * Fix broken git hints.
