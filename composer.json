@@ -15,8 +15,8 @@
   "license": "Apache 2.0",
   "require": {
     "php": ">=5.5.0",
-    "symfony/console": "^3.0",
-    "symfony/process": "^3.0",
+    "symfony/console": "~2.8|~3.0",
+    "symfony/process": "~2.8|~3.0",
     "plista-dataeng/updep": "^1.2.0"
   },
   "require-dev": {
