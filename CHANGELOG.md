@@ -1,4 +1,8 @@
-### 1.1.0-beta2 - 2016-08-17
+### 1.1.1 - 2016-08-18
+
+  * Extended symfony/console and symfony/process compatibility down to >=v2.8.
+
+### 1.1.0 - 2016-08-17
 
   * Release v1.1.0 as stable.
 
