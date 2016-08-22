@@ -1,3 +1,7 @@
+### 1.1.2 - 2016-08-22
+
+  * Fix bootstrap.php to make possible usage of Chimney installed with Composer within a project.
+
 ### 1.1.1 - 2016-08-18
 
   * Extended symfony/console and symfony/process compatibility down to >=v2.8.

@@ -1,15 +1,15 @@
 <?php
 define('CHIMNEY_CHANGELOG_TEMPLATE_DIR', __DIR__ . '/../templates/changelog');
 
-$file = __DIR__ . '/../vendor/autoload.php';
+$includeIfExists = function($file)
+{
+	return file_exists($file) ? include $file : false;
+};
 
-if (file_exists($file)) {
-    $loader = include $file;
-    if ($loader) {
-        return $loader;
-    }
+if ((!$loader = $includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = $includeIfExists(__DIR__.'/../../../autoload.php'))) {
+	echo 'You must set up the project dependencies using `composer install`'.PHP_EOL.
+		'See https://getcomposer.org/download/ for instructions on installing Composer'.PHP_EOL;
+	exit(1);
 }
 
-echo 'You must set up the dependencies using `composer install`' . PHP_EOL .
-   'See https://getcomposer.org/download/ for instructions on installing Composer' . PHP_EOL;
-exit(1);
+return $loader;
