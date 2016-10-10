@@ -1,3 +1,7 @@
+### 2.0.0 - 2016-10-10
+
+  * Moved the project on Packagist to "plista" (from "plista-dataeng") vendor. 
+
 ### 1.1.2 - 2016-08-22
 
   * Fix bootstrap.php to make possible usage of Chimney installed with Composer within a project.

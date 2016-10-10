@@ -1,5 +1,5 @@
 {
-  "name": "plista-dataeng/chimney",
+  "name": "plista/chimney",
   "description": "Console tool to ease building new versions of packages",
   "keywords": ["changelog", "updater", "release"],
   "authors": [
@@ -17,7 +17,7 @@
     "php": ">=5.5.0",
     "symfony/console": "~2.8|~3.0",
     "symfony/process": "~2.8|~3.0",
-    "plista-dataeng/updep": "^1.2.0"
+    "plista-dataeng/updep": "^2.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "4.*"
