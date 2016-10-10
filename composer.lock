@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6cec225ae586e615ce03933071207062",
-    "content-hash": "ccba5f6798d1cfd9579ff7fd9e767f4a",
+    "hash": "324a27f4341b15d22745e3a903baa765",
+    "content-hash": "11e7789af1f993c34c7aad92908346ea",
     "packages": [
         {
-            "name": "plista-dataeng/updep",
+            "name": "plista/updep",
             "version": "2.0.0",
             "source": {
                 "type": "git",
