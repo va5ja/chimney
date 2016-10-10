@@ -1,6 +1,8 @@
 ### 2.0.0 - 2016-10-10
 
-  * Moved the project on Packagist to "plista" (from "plista-dataeng") vendor. 
+  * Moved the project on Packagist to "plista" (from "plista-dataeng") vendor.
+  * Switched to use plista/updep v2.0.0 instead of plista-dataeng/updep v1.2.0.
+  * Updated 3rd party dependencies.
 
 ### 1.1.2 - 2016-08-22
 
