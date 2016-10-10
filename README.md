@@ -21,11 +21,11 @@ Currently supported changelog formats:
 
 ## Installation via Composer
 
-1. Add ``plista-dataeng/updep`` as a dependency to your project's ``composer.json`` file (change version to suit your version of Plista Chimney):
+1. Add ``plista/updep`` as a dependency to your project's ``composer.json`` file (change version to suit your version of Plista Chimney):
     ``` json
         {
             "require-dev": {
-                "plista-dataeng/chimney": "~1.0"
+                "plista/chimney": "~2.0"
             }
         }
     ```
@@ -122,7 +122,7 @@ bin/chimney make md
 ```
 or, for Debian:
 ```
-bin/chimney make debian --package=plista-dataeng-chimney
+bin/chimney make debian --package=plista-chimney
 ```
 or, with a post-run script:
 ```
@@ -197,6 +197,12 @@ The brand-new Toogle v2.0 is fully supported now. There is no backward-compatibi
 
 ### Plista UpDep
 Run `updep.sh --help` for help. 
+
+## Migration
+
+### From v1.2.0 to v2.0.0
+
+The only major change in 2.0.0 is that the vendor of the tool in composer.json was changed from "plista-dataeng" to "plista". So to add Plista Chimney it to your projects via Composer, just use "composer require --dev plista/chimney". 
 
 ## Authors
 
