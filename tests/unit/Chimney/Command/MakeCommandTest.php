@@ -37,7 +37,7 @@ class MakeCommandTest extends TestCase
             //'name' => 'debian'
         ]);
         $this->assertEquals(
-            ExitException::STATUS_NO_CHANGES,
+            ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN,
             $commandTester->getStatusCode()
         );
     }

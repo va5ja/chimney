@@ -1,3 +1,8 @@
+### 2.1.0 - 2017-09-18
+
+  * Added an ExitException when the CommandExecutor encounters an error.
+  * The reason for the change is that if the post-run script encounters an error, chimney doesn't forward it to the caller which makes gitlab-ci marking jobs incorrectly as successful.
+
 ### 2.0.0 - 2016-10-10
 
   * Moved the project on Packagist to "plista" (from "plista-dataeng") vendor.
