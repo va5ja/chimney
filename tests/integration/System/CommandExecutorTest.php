@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\IntegrationTest\Export;
 
+use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\System\CommandExecutor;
 
 /**
@@ -34,6 +35,15 @@ class CommandExecutorTest extends \PHPUnit_Framework_TestCase
     public function execute_emptyParameters()
     {
         $this->assertNotEmpty((new CommandExecutor())->execute('ls', ''), 'Default argument');
+    }
+
+    /**
+     * @test
+     */
+    public function execute_wrongCommand()
+    {
+        $this->setExpectedException(ExitException::class, '', ExitException::STATUS_ILLEGAL_COMMAND);
+        (new CommandExecutor())->execute('unknown command');
     }
 
     /**
