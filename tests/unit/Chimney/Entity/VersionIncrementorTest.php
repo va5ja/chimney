@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogEntry;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Entity\ChangeInterface;
@@ -22,7 +23,7 @@ use Plista\Chimney\Entity\VersionIncrementor;
 /**
  *
  */
-class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
+class VersionIncrementorTest extends TestCase
 {
     /**
      * @var ChangelogSection
@@ -38,7 +39,8 @@ class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
      */
     private $entryCount = 0;
 
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->section = new ChangelogSection($this->prophesize(ReleaseInterface::class)->reveal());
         $this->incrementor = new VersionIncrementor($this->section);
     }

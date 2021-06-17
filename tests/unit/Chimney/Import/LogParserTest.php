@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\Test\Unit\Import;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Import\Entry;
 use Plista\Chimney\Import\LogParser;
 
 /**
  *
  */
-class LogParserTest extends \PHPUnit_Framework_TestCase
+class LogParserTest extends TestCase
 {
     /**
      * @test

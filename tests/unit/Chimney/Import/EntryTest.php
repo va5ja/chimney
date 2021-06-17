@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Import;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\Change;
 use Plista\Chimney\Entity\ChangeType;
@@ -20,7 +21,7 @@ use Plista\Chimney\Import\Entry;
 /**
  *
  */
-class EntryTest extends \PHPUnit_Framework_TestCase
+class EntryTest extends TestCase
 {
     /**
      * @test

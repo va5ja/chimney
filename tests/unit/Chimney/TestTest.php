@@ -11,10 +11,12 @@
 
 namespace Plista\Chimney\Test;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Initial test to ensure unit tests can run.
  */
-class TestTest extends \PHPUnit_Framework_TestCase
+class TestTest extends TestCase
 {
     /**
      * @test

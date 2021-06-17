@@ -11,19 +11,20 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog\Template;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\Template\Loader;
 
 /**
  *
  */
-class LoaderTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends TestCase
 {
     /**
      * @var Loader
      */
     private $loader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->loader = new Loader();
     }

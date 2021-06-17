@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\GeneratorInterface;
 use Plista\Chimney\Changelog\Template;
 use Plista\Chimney\Export\ChangelogFileInterface;
@@ -19,7 +20,7 @@ use Plista\Chimney\Export\DebianChangelogUpdater;
 /**
  *
  */
-class DebianChangelogUpdaterTest extends \PHPUnit_Framework_TestCase
+class DebianChangelogUpdaterTest extends TestCase
 {
     /**
      * @test

@@ -11,16 +11,16 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogEntry;
 use Plista\Chimney\Changelog\ChangelogSection;
-use Plista\Chimney\Entity\DateTime;
 use Plista\Chimney\Changelog\Exception;
 use Plista\Chimney\Entity\ReleaseInterface;
 
 /**
  *
  */
-class ChangelogSectionTest extends \PHPUnit_Framework_TestCase
+class ChangelogSectionTest extends TestCase
 {
     /**
      * @test
@@ -78,7 +78,7 @@ class ChangelogSectionTest extends \PHPUnit_Framework_TestCase
         $releaseProphet = $this->prophesize(ReleaseInterface::class);
         $section = new ChangelogSection($releaseProphet->reveal());
 
-        $this->setExpectedException(Exception::class);
+        $this->expectException(Exception::class);
         $section->translatePlaceholder(uniqid());
     }
 
@@ -141,7 +141,7 @@ class ChangelogSectionTest extends \PHPUnit_Framework_TestCase
         $releaseProphet = $this->prophesize(ReleaseInterface::class);
         $section = new ChangelogSection($releaseProphet->reveal());
 
-        $this->setExpectedException(Exception::class);
+        $this->expectException(Exception::class);
         $section->translatePlaceholder('DATE::' . uniqid());
     }
 

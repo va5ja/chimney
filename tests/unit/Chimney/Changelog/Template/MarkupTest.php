@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog\Template;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\Template\Markup;
 use Plista\Chimney\Test\Fixture\FixtureProviderTrait;
 
 /**
  *
  */
-class MarkupTest extends \PHPUnit_Framework_TestCase
+class MarkupTest extends TestCase
 {
     use FixtureProviderTrait;
     /**
@@ -25,7 +26,7 @@ class MarkupTest extends \PHPUnit_Framework_TestCase
      */
     private $markup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markup = new Markup();
     }

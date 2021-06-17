@@ -11,20 +11,22 @@
 
 namespace Plista\Chimney\Test\Unit\Command\Make;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\PlaceholderManager as P;
 
 /**
  *
  */
-class PlaceholderManagerTest extends \PHPUnit_Framework_TestCase
+class PlaceholderManagerTest extends TestCase
 {
     /**
      * @var P
      */
     private $manager;
 
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->manager = new P();
     }
 
@@ -58,7 +60,9 @@ class PlaceholderManagerTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function collect_unknown() {
-        $this->setExpectedException(ExitException::class, '', ExitException::STATUS_SCRIPT_CANNOT_RUN);
+        $this->expectException(ExitException::class);
+        $this->expectExceptionMessage('Placeholder %SOMEUNKNOWN% is not recognized');
+        $this->expectExceptionCode(ExitException::STATUS_SCRIPT_CANNOT_RUN);
         $this->manager->collect('%SOMEUNKNOWN%', 'somevalue');
     }
 

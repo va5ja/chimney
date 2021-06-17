@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogList;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Entity\DateTime;
@@ -19,7 +20,7 @@ use Plista\Chimney\Entity\ReleaseInterface;
 /**
  *
  */
-class ChangelogListTest extends \PHPUnit_Framework_TestCase
+class ChangelogListTest extends TestCase
 {
     /**
      * @test

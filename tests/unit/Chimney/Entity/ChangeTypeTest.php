@@ -11,12 +11,13 @@
 
 namespace Plista\Chimney\Test\Unit\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\ChangeType;
 
 /**
  *
  */
-class ChangeTypeTest extends \PHPUnit_Framework_TestCase
+class ChangeTypeTest extends TestCase
 {
     /**
      * @var ChangeType
@@ -26,7 +27,7 @@ class ChangeTypeTest extends \PHPUnit_Framework_TestCase
     /**
      *
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->type = new ChangeType();
     }

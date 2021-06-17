@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Command;
 
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Plista\Chimney\Command\BaseCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  *
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
      * @var Application
@@ -33,7 +34,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected $commandName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->application = new Application();
         $command = $this->createCommand();

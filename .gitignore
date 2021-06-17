@@ -1,2 +1,6 @@
+/.php-version
+/.idea/
 /vendor
-phpunit.xml
+.phpunit
+.phpunit.result.cache
+/phpunit.xml

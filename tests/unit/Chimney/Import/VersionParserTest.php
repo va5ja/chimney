@@ -11,12 +11,13 @@
 
 namespace Plista\Chimney\Test\Unit\Import;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Import\VersionParser;
 
 /**
  *
  */
-class VersionParserTest extends \PHPUnit_Framework_TestCase
+class VersionParserTest extends TestCase
 {
     /**
      * @param string $versionStr

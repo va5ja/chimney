@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\IntegrationTest\Export;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\System\CommandExecutor;
 
 /**
  *
  */
-class CommandExecutorTest extends \PHPUnit_Framework_TestCase
+class CommandExecutorTest extends TestCase
 {
     /**
      * @test
@@ -42,7 +43,9 @@ class CommandExecutorTest extends \PHPUnit_Framework_TestCase
      */
     public function execute_wrongCommand()
     {
-        $this->setExpectedException(ExitException::class, '', ExitException::STATUS_ILLEGAL_COMMAND);
+        $this->expectException(ExitException::class);
+        $this->expectExceptionMessage("The command below returned non-zero value: 127 \n");
+        $this->expectExceptionCode(ExitException::STATUS_ILLEGAL_COMMAND);
         (new CommandExecutor())->execute('unknown command');
     }
 

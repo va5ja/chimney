@@ -12,17 +12,18 @@
 namespace Plista\Chimney\Test\Unit\System;
 
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\System\ExecutorInterface;
 use Plista\Chimney\System\GitCommand;
 
 /**
  *
  */
-class GitCommandTest extends \PHPUnit_Framework_TestCase
+class GitCommandTest extends TestCase
 {
     private $executorProphet;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->executorProphet = $this->prophesize(ExecutorInterface::class);
     }

@@ -11,12 +11,13 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog\Template;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\Template\PlaceholderCollector;
 
 /**
  *
  */
-class PlaceholderCollectorTest extends \PHPUnit_Framework_TestCase
+class PlaceholderCollectorTest extends TestCase
 {
     /**
      * @param array $expected

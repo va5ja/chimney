@@ -32,7 +32,7 @@ class AboutTest extends TestCase
     public function execute()
     {
         $commandTester = $this->executeCommand();
-        $this->assertContains('Plista Chimney', $commandTester->getDisplay());
+        $this->assertStringContainsString('Plista Chimney', $commandTester->getDisplay());
         // ...
     }
 }

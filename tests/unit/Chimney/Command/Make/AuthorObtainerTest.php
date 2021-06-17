@@ -3,6 +3,7 @@
 
 namespace Plista\Chimney\Test\Unit\Command\Make;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Command\Make\AuthorLoader;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\System\GitCommandInterface;
@@ -10,7 +11,7 @@ use Plista\Chimney\System\GitCommandInterface;
 /**
  *
  */
-class AuthorLoaderTest extends \PHPUnit_Framework_TestCase
+class AuthorLoaderTest extends TestCase
 {
     /**
      * @test

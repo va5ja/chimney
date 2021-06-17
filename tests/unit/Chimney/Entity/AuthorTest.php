@@ -11,19 +11,20 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Author;
 
 /**
  *
  */
-class AuthorTest extends \PHPUnit_Framework_TestCase
+class AuthorTest extends TestCase
 {
     /**
      * @var Author
      */
     private $author;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->author = new Author();
     }

@@ -11,25 +11,23 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
-use Plista\Chimney\Changelog\ChangelogEntry;
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogListInterface;
-use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Changelog\Generator;
-use Plista\Chimney\Entity\ReleaseInterface;
 use Plista\Chimney\Changelog\Template\Markup;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  *
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends TestCase
 {
     /**
      * @var ChangelogListInterface|ObjectProphecy
      */
     private $listProphet;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listProphet = $this->prophesize(ChangelogListInterface::class);
     }

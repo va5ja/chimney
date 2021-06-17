@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Command\Make;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\Template;
 use Plista\Chimney\Command\Make\ExitException;
 use Plista\Chimney\Command\Make\ChangelogUpdaterFactory;
@@ -19,7 +20,7 @@ use Plista\Chimney\Export;
 /**
  *
  */
-class ChangelogUpdaterFactoryTest extends \PHPUnit_Framework_TestCase
+class ChangelogUpdaterFactoryTest extends TestCase
 {
     /**
      * @test
@@ -42,7 +43,9 @@ class ChangelogUpdaterFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new ChangelogUpdaterFactory();
         $loaderProphet = $this->prophesize(Template\LoaderInterface::class);
 
-        $this->setExpectedException(ExitException::class, '', ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN);
+        $this->expectException(ExitException::class);
+        $this->expectExceptionMessage('The changelog type is not recognized');
+        $this->expectExceptionCode(ExitException::STATUS_CHANGELOG_TYPE_UNKNOWN);
         $factory->create('random123', $loaderProphet->reveal());
     }
 

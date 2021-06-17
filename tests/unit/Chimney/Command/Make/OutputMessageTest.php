@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\Test\Unit\Command\Make;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Command\Make\OutputMessage;
 use Plista\Chimney\Command\Make\PlaceholderManager as P;
 
 /**
  *
  */
-class OutputMessageTest extends \PHPUnit_Framework_TestCase
+class OutputMessageTest extends TestCase
 {
     /**
      * @var OutputMessage
@@ -34,7 +35,8 @@ class OutputMessageTest extends \PHPUnit_Framework_TestCase
      */
     private $hrDouble;
 
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->message = new OutputMessage();
         $this->message->appendN("beginning");
         $this->hrSingle = OutputMessage::HR_SINGLE;

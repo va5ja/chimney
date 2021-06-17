@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\IntegrationTest\Export;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Entity\Author;
 use Plista\Chimney\Entity\DateTime;
@@ -24,7 +25,7 @@ use Plista\Chimney\Test\Fixture\FixtureProviderTrait;
 /**
  *
  */
-class VersionIncrementorTest extends \PHPUnit_Framework_TestCase
+class VersionIncrementorTest extends TestCase
 {
     use FixtureProviderTrait;
 

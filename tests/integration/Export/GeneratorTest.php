@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\IntegrationTest\Export;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Changelog\ChangelogList;
 use Plista\Chimney\Changelog\ChangelogSection;
 use Plista\Chimney\Changelog\Generator;
@@ -26,7 +27,7 @@ use Plista\Chimney\Test\Fixture\FixtureProviderTrait;
 /**
  *
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends TestCase
 {
     use FixtureProviderTrait;
 

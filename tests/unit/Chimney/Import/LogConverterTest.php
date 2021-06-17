@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Import;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Import\LogConverter;
 use Plista\Chimney\Changelog\ChangelogEntry;
 use Plista\Chimney\Import\Entry;
@@ -19,7 +20,7 @@ use Plista\Chimney\Import\LogParserInterface;
 /**
  *
  */
-class LogConverterTest extends \PHPUnit_Framework_TestCase
+class LogConverterTest extends TestCase
 {
     /**
      * @test

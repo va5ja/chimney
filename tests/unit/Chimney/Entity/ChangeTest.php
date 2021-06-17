@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Change;
 use Plista\Chimney\Entity\ChangeType;
 use Plista\Chimney\Entity\ChangeTypeInterface;
@@ -19,7 +20,7 @@ use Plista\Chimney\Changelog\IChangeType;
 /**
  *
  */
-class ChangeTest extends \PHPUnit_Framework_TestCase
+class ChangeTest extends TestCase
 {
     /**
      * @test

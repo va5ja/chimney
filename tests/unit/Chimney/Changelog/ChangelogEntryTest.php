@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\ChangeInterface;
 use Plista\Chimney\Changelog\ChangelogEntry;
 use Plista\Chimney\Entity\Change;
@@ -21,12 +22,12 @@ use Plista\Chimney\Entity\DateTimeInterface;
 /**
  *
  */
-class ChangelogEntryTest extends \PHPUnit_Framework_TestCase
+class ChangelogEntryTest extends TestCase
 {
     private $datetimeProphet;
     private $authorProphet;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->datetimeProphet = $this->prophesize(DateTimeInterface::class);
         $this->authorProphet = $this->prophesize(AuthorInterface::class);

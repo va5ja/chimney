@@ -11,6 +11,7 @@
 
 namespace Plista\Chimney\Test\Unit\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Release;
 use Plista\Chimney\Entity\AuthorInterface;
 use Plista\Chimney\Entity\DateTimeInterface;
@@ -19,13 +20,13 @@ use Plista\Chimney\Entity\VersionExportable;
 /**
  *
  */
-class ReleaseTest extends \PHPUnit_Framework_TestCase
+class ReleaseTest extends TestCase
 {
     private $versionProphet;
     private $datetimeProphet;
     private $authorProphet;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->versionProphet = $this->prophesize(VersionExportable::class);
         $this->datetimeProphet = $this->prophesize(DateTimeInterface::class);

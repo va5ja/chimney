@@ -11,19 +11,21 @@
 
 namespace Plista\Chimney\Test\Unit\Console;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Console\OutputMessage;
 
 /**
  *
  */
-class OutputMessageTest extends \PHPUnit_Framework_TestCase
+class OutputMessageTest extends TestCase
 {
     /**
      * @var OutputMessage
      */
     private $message;
 
-    protected function setUp() {
+    protected function setUp(): void
+    {
         $this->message = new OutputMessage();
     }
 

@@ -11,21 +11,21 @@
 
 namespace Plista\Chimney\Test\Unit\Changelog;
 
-use Plista\Chimney\Changelog\Template;
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Export\ChangelogFile;
 use Plista\Chimney\Export\Exception;
 
 /**
  *
  */
-class ChangelogFileTest extends \PHPUnit_Framework_TestCase
+class ChangelogFileTest extends TestCase
 {
     /**
      * @test
      */
     public function instantiate_notExists()
     {
-        $this->setExpectedException(Exception::class);
+        $this->expectException(Exception::class);
         new ChangelogFile(uniqid(__DIR__ . DIRECTORY_SEPARATOR));
     }
 }

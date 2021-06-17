@@ -11,11 +11,12 @@
 
 namespace Plista\Chimney\Test\Unit\Repository;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Version;
 use Plista\Chimney\Repository\GitPackageInfoObtainer;
 use Plista\Chimney\System\GitCommandInterface;
 
-class GitPackageInfoObtainerTest extends \PHPUnit_Framework_TestCase
+class GitPackageInfoObtainerTest extends TestCase
 {
     /**
      * @test

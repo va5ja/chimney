@@ -37,5 +37,7 @@ EOT
 <comment>...</comment>
 EOT
         );
+
+        return 0;
     }
 }

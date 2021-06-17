@@ -11,13 +11,14 @@
 
 namespace Plista\Chimney\Test\Unit\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Plista\Chimney\Entity\Version;
 use Plista\Chimney\Entity\VersionException;
 
 /**
  *
  */
-class VersionTest extends \PHPUnit_Framework_TestCase
+class VersionTest extends TestCase
 {
     /**
      * @test
@@ -109,7 +110,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $version = new Version(2, 0, 0);
         $version->setAlpha(2);
         $version->setBeta();
-        $this->setExpectedException(VersionException::class);
+        $this->expectException(VersionException::class);
         $version->export();
     }
 
@@ -121,7 +122,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $version = new Version(2, 0, 0);
         $version->setReleaseCandidate();
         $version->setAlpha();
-        $this->setExpectedException(VersionException::class);
+        $this->expectException(VersionException::class);
         $version->export();
     }
 
@@ -133,7 +134,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $version = new Version(2, 0, 0);
         $version->setReleaseCandidate();
         $version->setBeta();
-        $this->setExpectedException(VersionException::class);
+        $this->expectException(VersionException::class);
         $version->export();
     }
 
@@ -145,7 +146,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $version = new Version(2, 0, 0);
         $version->setAlpha();
         $version->setBeta(2);
-        $this->setExpectedException(VersionException::class);
+        $this->expectException(VersionException::class);
         $version->export();
     }
 
